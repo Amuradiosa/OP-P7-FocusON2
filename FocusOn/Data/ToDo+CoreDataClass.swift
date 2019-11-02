@@ -1,8 +1,8 @@
 //
-//  Task+CoreDataClass.swift
+//  ToDo+CoreDataClass.swift
 //  FocusOn
 //
-//  Created by Ahmad Murad on 01/11/2019.
+//  Created by Ahmad Murad on 02/11/2019.
 //  Copyright © 2019 Ahmad Murad. All rights reserved.
 //
 //
@@ -11,6 +11,6 @@ import Foundation
 import CoreData
 
 
-public class Task: NSManagedObject {
+public class ToDo: NSManagedObject {
 
 }

@@ -23,7 +23,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     private let context  = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    private var fetchedRC: NSFetchedResultsController<Goal>!
+    private var fetchedRC: NSFetchedResultsController<ToDo>!
     private let formatter = DateFormatter()
     
     
@@ -38,7 +38,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
-            
+            refresh()
             // do the fetch request here for goals and tasks(using do catch block) and then store the data in the goals and tasks array to populate the tableview
         }
 
@@ -61,7 +61,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if let goals = fetchedRC.sections?[section].objects as? [Goal], let goal = goals.first {
+        if let goals = fetchedRC.sections?[section].objects as? [ToDo], let goal = goals.first {
             return "\(String(describing: goal.cd))"
         }
         return "it didn't work"
@@ -72,13 +72,13 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     // MARK: - Main private functions
     
     private func refresh() {
-        let request = Goal.fetchRequest() as NSFetchRequest<Goal>
+        let request = ToDo.fetchRequest() as NSFetchRequest<ToDo>
         // FIXME: - if needed, specify the sortdescriptor
         //let sort    = NSSortDescriptor()
-        let sort    = NSSortDescriptor(key: #keyPath(Goal.cd), ascending: true)
+        let sort    = NSSortDescriptor(key: #keyPath(ToDo.cd), ascending: true)
         // might need another sort descriptor to differntiate between goals and tasks, for sectioning seperation
         request.sortDescriptors = [sort]
-        fetchedRC = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: #keyPath(Goal.cd), cacheName: nil)
+        fetchedRC = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: #keyPath(ToDo.cd), cacheName: nil)
         do {
             try fetchedRC.performFetch()
         } catch let error as NSError {

@@ -16,7 +16,8 @@ class TaskCustomStaticTableViewCell: UITableViewCell {
     
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     private let context  = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    private var taskFetchedRC: NSFetchedResultsController<Task>!
+    private var fetchedRC: NSFetchedResultsController<ToDo>!
+    private let formatter = DateFormatter()
     
     // MARK: - Outlets
     
@@ -36,11 +37,13 @@ extension TaskCustomStaticTableViewCell: UITextFieldDelegate {
     // MARK: - Actions
     
     @IBAction func editingDidEnd(_ sender: UITextField) {
-        let task = Task(entity: Task.entity(), insertInto: context)
+        let task = ToDo(entity: ToDo.entity(), insertInto: context)
         task.caption = sender.text!
         // FIXME: - using frc delegate to update checkmarkButton status to the database
         task.completed = checkmarkButton.isSelected
-        task.taskNu = Float(taskNumber!.tag)
+        //task.taskNu = Float(taskNumber!.tag)
+        task.kind = true
+        task.cd = Date()
         print("task editing did end is working")
         appDelegate.saveContext()
     }
@@ -58,6 +61,7 @@ extension TaskCustomStaticTableViewCell: UITextFieldDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         taskCaption.delegate = self
+        formatter.dateFormat = "dd MM yyyy"
 //        refresh()
         // Initialization code
     }

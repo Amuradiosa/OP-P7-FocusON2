@@ -16,8 +16,7 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
     
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     private let context  = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    private var goalFetchedRC: NSFetchedResultsController<Goal>!
-    private var taskFetchedRC: NSFetchedResultsController<Task>!
+    private var fetchedRC: NSFetchedResultsController<ToDo>!
     private let formatter = DateFormatter()
         
     // MARK: - Goal Cell outlets
@@ -35,10 +34,11 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
     
     
     @IBAction func editingDidEnd(_ sender: UITextField) {
-        let goal = Goal(entity: Goal.entity(), insertInto: context)
+        let goal = ToDo(entity: ToDo.entity(), insertInto: context)
         goal.caption = sender.text!
         goal.completed = checkmarkButton.isSelected
         goal.cd = Date()
+        goal.kind = false
         appDelegate.saveContext()
     }
     
@@ -62,7 +62,6 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         refresh()
-        taskrefresh()
         // do the fetch request here for goals and tasks(using do catch block) and then store the data in the goals and tasks array to populate the tableview
     }
     
@@ -108,13 +107,13 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
             case 0:
-                if validateIndexPath(indexPath, fetchedRC: goalFetchedRC as! NSFetchedResultsController<NSFetchRequestResult>) {
-                if let goal = goalFetchedRC?.object(at: indexPath) {
-                    goalCaption.text = goal.caption
-                    checkmarkButton.isSelected = goal.completed
-                    return goalCustomCell
-                } else {
-                    return goalCustomCell
+                if validateIndexPath(indexPath, fetchedRC: fetchedRC as! NSFetchedResultsController<NSFetchRequestResult>) {
+                    if let goal = fetchedRC?.object(at: indexPath) {
+                        goalCaption.text = goal.caption
+                        checkmarkButton.isSelected = goal.completed
+                        return goalCustomCell
+                    } else {
+                        return goalCustomCell
                     }
                 } else {
                     print("Attempting to configure a cell for an indexPath that is out of bounds: \(indexPath)")
@@ -125,12 +124,9 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
                     return UITableViewCell()
                 }
                 cell.taskNumber.image = UIImage(named: "\(indexPath.row + 1).circle.fill")
-                cell.taskNumber.tag = indexPath.row + 1
                 print("\(indexPath.section) and \(indexPath.row)")
-                customisedIndexPath = indexPath
-                customisedIndexPath.section = customisedIndexPath.section - 1
-                if validateIndexPath(customisedIndexPath, fetchedRC: taskFetchedRC as! NSFetchedResultsController<NSFetchRequestResult>) {
-                    if let task = taskFetchedRC?.object(at: customisedIndexPath) {
+                if validateIndexPath(indexPath, fetchedRC: fetchedRC as! NSFetchedResultsController<NSFetchRequestResult>) {
+                    if let task = fetchedRC?.object(at: indexPath) {
                         cell.taskCaption.text = task.caption
                         cell.checkmarkButton.isSelected = task.completed
                         return cell
@@ -215,29 +211,15 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
     // MARK: - Main private functions
     
     private func refresh() {
-        let request = Goal.fetchRequest() as NSFetchRequest<Goal>
+        let request = ToDo.fetchRequest() as NSFetchRequest<ToDo>
         // FIXME: - if needed, specify the sortdescriptor
         //let sort    = NSSortDescriptor()
-        let sort    = NSSortDescriptor(key: #keyPath(Goal.cd), ascending: true)
+        let sort    = NSSortDescriptor(key: #keyPath(ToDo.cd), ascending: true)
         // might need another sort descriptor to differntiate between goals and tasks, for sectioning seperation
         request.sortDescriptors = [sort]
-        goalFetchedRC = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedRC = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: #keyPath(ToDo.kind), cacheName: nil)
         do {
-            try goalFetchedRC.performFetch()
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-        }
-    }
-    private func taskrefresh() {
-        let request = Task.fetchRequest() as NSFetchRequest<Task>
-        // FIXME: - if needed, specify the sortdescriptor
-        //let sort    = NSSortDescriptor()
-        let sort    = NSSortDescriptor(key: #keyPath(Task.taskNu), ascending: true)
-        // might need another sort descriptor to differntiate between goals and tasks, for sectioning seperation
-        request.sortDescriptors = [sort]
-        taskFetchedRC = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-        do {
-            try taskFetchedRC.performFetch()
+            try fetchedRC.performFetch()
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }

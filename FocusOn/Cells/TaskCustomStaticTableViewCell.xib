@@ -21,6 +21,7 @@
                         <fontDescription key="fontDescription" name="HelveticaNeue-Italic" family="Helvetica Neue" pointSize="17"/>
                         <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                         <connections>
+                            <action selector="didEndOnExit:" destination="KGk-i7-Jjw" eventType="editingDidEndOnExit" id="dWm-0c-Msd"/>
                             <action selector="editingDidEnd:" destination="KGk-i7-Jjw" eventType="editingDidEnd" id="FI5-NA-j6z"/>
                         </connections>
                     </textField>

@@ -12,12 +12,52 @@ import CoreData
 
 class TaskCustomStaticTableViewCell: UITableViewCell {
     
+    
+    
+//    func weDontHaveA(task: ToDo?) -> Bool {
+//        self.task = task
+//        if let todaysTask = task {
+//            let dayOfCreation = formatter.calendar.component(.day, from: todaysTask.cd!)
+//            let todaysDay = formatter.calendar.component(.day, from: Date())
+//            if dayOfCreation != todaysDay {
+//                return true
+//            } else {
+//                return false
+//            }
+//        } else {
+//            return true
+//        }
+//    }
+//    var taskcell: TodayTableViewController?
+    
     // MARK: - Variables
     
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     private let context  = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     private var fetchedRC: NSFetchedResultsController<ToDo>!
     private let formatter = DateFormatter()
+    private var task: ToDo!
+//    static var currentIndexPath: Int?
+
+    
+//    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, task: ToDo) {
+//        super.init(style: style, reuseIdentifier: reuseIdentifier)
+//        self.task = task
+//    }
+//
+//    init?(task: ToDo) {
+//        super.init(coder: NSCoder())
+//        self.task = task
+//    }
+//    required init?(coder aDecoder: NSCoder) {
+//       super.init(coder: aDecoder)
+//    }
+    
+    
+    
+    
+    
+    
     
     // MARK: - Outlets
     
@@ -25,9 +65,11 @@ class TaskCustomStaticTableViewCell: UITableViewCell {
     @IBOutlet weak var taskCaption: UITextField!
     @IBOutlet weak var checkmarkButton: UIButton!
     
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         // Configure the view for the selected state
+        
     }
     
 }
@@ -36,24 +78,87 @@ extension TaskCustomStaticTableViewCell: UITextFieldDelegate {
     
     // MARK: - Actions
     
+    
+    
+    
     @IBAction func editingDidEnd(_ sender: UITextField) {
-        let task = ToDo(entity: ToDo.entity(), insertInto: context)
-        task.caption = sender.text!
-        // FIXME: - using frc delegate to update checkmarkButton status to the database
-        task.completed = checkmarkButton.isSelected
-        //task.taskNu = Float(taskNumber!.tag)
-        task.kind = true
-        task.cd = Date()
-        print("task editing did end is working")
-        appDelegate.saveContext()
+//        if weDontHaveA(task: task) {
+        if isItTheSameDay() {
+            let newTask = ToDo(entity: ToDo.entity(), insertInto: context)
+            newTask.caption = sender.text!
+            newTask.completed = checkmarkButton.isSelected
+            newTask.cd = Date()
+            newTask.kind = true
+            appDelegate.saveContext()
+        
+        } else {
+            let task = fetchedRC.object(at: IndexPath(row: sender.tag, section: 1))
+            task.caption = sender.text!
+            task.completed = checkmarkButton.isSelected
+            appDelegate.saveContext()
+        }
     }
+    
+//    func handleTapGesture(gestureRecognizer: UITapGestureRecognizer) {
+//        if gestureRecognizer.state != .ended {
+//            return
+//        }
+//        let point = gestureRecognizer.location(in: taskcell?.tableView)
+//        if let indexPath = taskcell?.tableView.indexPathForRow(at: point) {
+//
+//        }
+//    }
+        
+        func isItTheSameDay() -> Bool {
+            if let tasks = fetchedRC.sections?[1].objects as? [ToDo] {
+                let task = tasks.first
+                let dayOfCreation = formatter.calendar.component(.day, from: task!.cd!)
+                let todaysDay = formatter.calendar.component(.day, from: Date())
+                if dayOfCreation != todaysDay {
+                    return true
+                } else {
+                    return false
+                }
+            } else {
+                return true
+            }
+        }
+    
+    
+    
+//    func populatSavedObjectsIntoLocalArray(text: UITextField) {
+//        let sections = fetchedRC.sections
+//        let objs = sections?[1].objects
+//        let numberOfOjects = objs?.count
+//        for indexPathRow in 0...2 {
+//            let task = objs?[indexPathRow]
+//            tasks.append(task as! ToDo)
+//        }
+//    }
+//
+//    func IndexPathOfDifferentTask(tasks: [ToDo], text: UITextField) -> IndexPath {
+//        let tasks = tasks
+//        if let index = tasks.firstIndex(where: {$0.caption == text.text}) {
+//            let excludedIndex = index
+//        }
+//    }
+//    func indexPath(forObject object: Int) -> IndexPath? {
+//
+//    }
+    
+    
+    
+    
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
     }
     
-    @IBAction func checkmarkButtonPressed(_ sender: Any) {
+    @IBAction func checkmarkButtonPressed(_ sender: UIButton) {
         checkmarkButton.isSelected = !checkmarkButton.isSelected
+        let task = fetchedRC.object(at: IndexPath(row: sender.tag, section: 1))
+        task.completed = checkmarkButton.isSelected
+        appDelegate.saveContext()
     }
     
     // MARK: - Configuration
@@ -62,8 +167,25 @@ extension TaskCustomStaticTableViewCell: UITextFieldDelegate {
         super.awakeFromNib()
         taskCaption.delegate = self
         formatter.dateFormat = "dd MM yyyy"
+        refresh()
+//        let tapGestureRecogniser = UITapGestureRecognizer(target: self, action: <#T##Selector?#>)
+//        taskcell?.delegate = self
 //        refresh()
         // Initialization code
+    }
+    
+    
+    
+    private func refresh() {
+        let request = ToDo.fetchRequest() as NSFetchRequest<ToDo>
+        let sort    = NSSortDescriptor(key: #keyPath(ToDo.cd), ascending: true)
+        request.sortDescriptors = [sort]
+        fetchedRC = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: #keyPath(ToDo.kind), cacheName: nil)
+        do {
+            try fetchedRC.performFetch()
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
     }
 //    private func refresh() {
 //        let request = Task.fetchRequest() as NSFetchRequest<Task>
@@ -81,4 +203,5 @@ extension TaskCustomStaticTableViewCell: UITextFieldDelegate {
 //
 //    }
 }
+
 

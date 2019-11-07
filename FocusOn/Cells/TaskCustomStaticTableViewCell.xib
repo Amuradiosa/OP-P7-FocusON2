@@ -21,8 +21,8 @@
                         <fontDescription key="fontDescription" name="HelveticaNeue-Italic" family="Helvetica Neue" pointSize="17"/>
                         <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                         <connections>
-                            <action selector="didEndOnExit:" destination="KGk-i7-Jjw" eventType="editingDidEndOnExit" id="dWm-0c-Msd"/>
-                            <action selector="editingDidEnd:" destination="KGk-i7-Jjw" eventType="editingDidEnd" id="FI5-NA-j6z"/>
+                            <action selector="editingChanged:" destination="KGk-i7-Jjw" eventType="editingChanged" id="RIP-p7-EjM"/>
+                            <action selector="valueChanged:" destination="KGk-i7-Jjw" eventType="valueChanged" id="Tce-0g-Z1a"/>
                         </connections>
                     </textField>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ehf-Jq-YSV">

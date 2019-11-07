@@ -37,6 +37,21 @@ class TaskCustomStaticTableViewCell: UITableViewCell {
     private var fetchedRC: NSFetchedResultsController<ToDo>!
     private let formatter = DateFormatter()
     private var task: ToDo!
+//    var tableView = TodayTableViewController()
+//    let defaults = UserDefaults.standard
+//    let tasksDayUserDefaultsKey = "taskKey"
+//    var savedtasksDayIndex: Int {
+//        get {
+//            let savedIndex = defaults.value(forKey: tasksDayUserDefaultsKey)
+//            if savedIndex == nil {
+//                defaults.set(0, forKey: tasksDayUserDefaultsKey)
+//            }
+//            return defaults.integer(forKey: tasksDayUserDefaultsKey)
+//        }
+//        set {
+//            defaults.set(newValue, forKey: tasksDayUserDefaultsKey)
+//        }
+//    }
 //    static var currentIndexPath: Int?
 
     
@@ -59,6 +74,7 @@ class TaskCustomStaticTableViewCell: UITableViewCell {
     
     
     
+    
     // MARK: - Outlets
     
     @IBOutlet weak var taskNumber: UIImageView!
@@ -72,32 +88,67 @@ class TaskCustomStaticTableViewCell: UITableViewCell {
         
     }
     
+    
+    
 }
-
 extension TaskCustomStaticTableViewCell: UITextFieldDelegate {
     
     // MARK: - Actions
     
+//    @IBAction func valueChanged(_ sender: UITextField) {
+//        if isItTheSameDay() {
+//            let newTask = ToDo(entity: ToDo.entity(), insertInto: context)
+//            newTask.caption = sender.text!
+//            newTask.completed = checkmarkButton.isSelected
+//            newTask.cd = Date()
+//            newTask.kind = true
+//            appDelegate.saveContext()
+//
+//        } else {
+//            let task = fetchedRC.object(at: IndexPath(row: sender.tag, section: 1))
+//            task.caption = sender.text!
+//            task.completed = checkmarkButton.isSelected
+//            appDelegate.saveContext()
+//        }
+//    }
     
     
-    
-    @IBAction func editingDidEnd(_ sender: UITextField) {
-//        if weDontHaveA(task: task) {
-        if isItTheSameDay() {
+    @IBAction func editingChanged(_ sender: UITextField) {
+        if isItTheSameDay(forThisTask: sender.tag) {
             let newTask = ToDo(entity: ToDo.entity(), insertInto: context)
             newTask.caption = sender.text!
             newTask.completed = checkmarkButton.isSelected
             newTask.cd = Date()
             newTask.kind = true
             appDelegate.saveContext()
-        
+            sender.tag += 3
+//            tableView.tableView.reloadData()
         } else {
             let task = fetchedRC.object(at: IndexPath(row: sender.tag, section: 1))
             task.caption = sender.text!
             task.completed = checkmarkButton.isSelected
             appDelegate.saveContext()
         }
+        
     }
+    
+//    @IBAction func editingDidEnd(_ sender: UITextField) {
+////        if weDontHaveA(task: task) {
+//        if isItTheSameDay() {
+//            let newTask = ToDo(entity: ToDo.entity(), insertInto: context)
+//            newTask.caption = sender.text!
+//            newTask.completed = checkmarkButton.isSelected
+//            newTask.cd = Date()
+//            newTask.kind = true
+//            appDelegate.saveContext()
+//
+//        } else {
+//            let task = fetchedRC.object(at: IndexPath(row: sender.tag, section: 1))
+//            task.caption = sender.text!
+//            task.completed = checkmarkButton.isSelected
+//            appDelegate.saveContext()
+//        }
+//    }
     
 //    func handleTapGesture(gestureRecognizer: UITapGestureRecognizer) {
 //        if gestureRecognizer.state != .ended {
@@ -109,20 +160,28 @@ extension TaskCustomStaticTableViewCell: UITextFieldDelegate {
 //        }
 //    }
         
-        func isItTheSameDay() -> Bool {
-            if let tasks = fetchedRC.sections?[1].objects as? [ToDo] {
-                let task = tasks.first
-                let dayOfCreation = formatter.calendar.component(.day, from: task!.cd!)
-                let todaysDay = formatter.calendar.component(.day, from: Date())
+    func isItTheSameDay(forThisTask: Int) -> Bool {
+//            if let tasks = fetchedRC.sections?[1].objects as? [ToDo] {
+//                let task = tasks.first
+        refresh()
+        if fetchedRC.sections?.count == 0 || fetchedRC.sections?.count == 1 {
+            return true
+        }
+        if forThisTask + 1 > (fetchedRC.sections?[1].numberOfObjects)! {
+           return true
+        }
+        let task = fetchedRC?.object(at: IndexPath(row: forThisTask, section: 1))
+        let dayOfCreation = formatter.calendar.component(.day, from: (task?.cd!)!)
+            let todaysDay = formatter.calendar.component(.day, from: Date())
                 if dayOfCreation != todaysDay {
+//                    savedtasksDayIndex += 3
                     return true
                 } else {
                     return false
                 }
-            } else {
-                return true
-            }
         }
+        
+    
     
     
     
@@ -178,7 +237,7 @@ extension TaskCustomStaticTableViewCell: UITextFieldDelegate {
     
     private func refresh() {
         let request = ToDo.fetchRequest() as NSFetchRequest<ToDo>
-        let sort    = NSSortDescriptor(key: #keyPath(ToDo.cd), ascending: true)
+        let sort    = NSSortDescriptor(key: #keyPath(ToDo.kind), ascending: true)
         request.sortDescriptors = [sort]
         fetchedRC = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: #keyPath(ToDo.kind), cacheName: nil)
         do {
@@ -203,5 +262,6 @@ extension TaskCustomStaticTableViewCell: UITextFieldDelegate {
 //
 //    }
 }
+
 
 

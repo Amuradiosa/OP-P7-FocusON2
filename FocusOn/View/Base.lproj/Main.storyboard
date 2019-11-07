@@ -120,7 +120,7 @@
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Italic" family="Helvetica Neue" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                                     <connections>
-                                                        <action selector="editingDidEnd:" destination="bgJ-PD-DA4" eventType="editingDidEnd" id="LI4-BW-qlw"/>
+                                                        <action selector="editingChanged:" destination="bgJ-PD-DA4" eventType="editingChanged" id="aFx-Li-RoZ"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>

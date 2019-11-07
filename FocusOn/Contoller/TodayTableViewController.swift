@@ -24,6 +24,20 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
     private let formatter = DateFormatter()
     private var selected: IndexPath!
     private var goal: ToDo!
+    let defaults = UserDefaults.standard
+//    let goalDayUserDefaultsKey = "goalKey"
+//    var savedGoalDayIndex: Int {
+//        get {
+//            let savedIndex = defaults.value(forKey: goalDayUserDefaultsKey)
+//            if savedIndex == nil {
+//                defaults.set(0, forKey: goalDayUserDefaultsKey)
+//            }
+//            return defaults.integer(forKey: goalDayUserDefaultsKey)
+//        }
+//        set {
+//            defaults.set(newValue, forKey: goalDayUserDefaultsKey)
+//        }
+//    }
 //    var delegate: todaysTasksDelegate?
         
     // MARK: - Goal Cell outlets
@@ -35,14 +49,15 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
     @IBOutlet weak var goalCustomCell: UITableViewCell!
     
     
+    
+    
     // MARK: - Goal Cell actions
     @IBAction func checkButtonPressed(_ sender: Any) {
         checkmarkButton.isSelected = !checkmarkButton.isSelected
-        editingDidEnd(goalCaption)
+        editingChanged(goalCaption)
     }
     
-    
-    @IBAction func editingDidEnd(_ sender: UITextField) {
+    @IBAction func editingChanged(_ sender: UITextField) {
         if WeDontHaveA(goal: goal) {
             let goal = ToDo(entity: ToDo.entity(), insertInto: context)
             goal.caption = sender.text!
@@ -56,14 +71,16 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
             goal.completed = checkmarkButton.isSelected
             appDelegate.saveContext()
         }
-        
     }
+    
+    
     
     func WeDontHaveA(goal: ToDo?) -> Bool {
         if let todaysGoal = goal {
             let dayOfCreation = formatter.calendar.component(.day, from: todaysGoal.cd!)
             let todaysDay = formatter.calendar.component(.day, from: Date())
             if dayOfCreation != todaysDay {
+//                savedGoalDayIndex += 1
                 return true
             } else {
                 return false
@@ -94,7 +111,6 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        refresh()
         // do the fetch request here for goals and tasks(using do catch block) and then store the data in the goals and tasks array to populate the tableview
     }
     
@@ -103,6 +119,8 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
         goalCaption.delegate = self
         formatter.timeStyle = .none
         formatter.dateStyle = .short
+        refresh()
+        
 //        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapEdit(_:)))
 //        tableView.addGestureRecognizer(tapGesture)
 //        tapGesture.delegate = self
@@ -153,12 +171,23 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
 //        }
 //    }
 //
+    func dayIndexPathRow(forSection: Int) -> Int {
+//        if  (fetchedRC.sections?[forSection].numberOfObjects)! == 1 || (fetchedRC.sections?[forSection].numberOfObjects)! == 2 || (fetchedRC.sections?[forSection].numberOfObjects)! == 3 {
+//            return 0
+//        } else {
+        if forSection == 0 {
+            return (fetchedRC.sections?[forSection].numberOfObjects)! - 1
+        } else {
+            return (fetchedRC.sections?[forSection].numberOfObjects)! - 3
+        }
+//        }
+    }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
             case 0:
-                if validateIndexPath(indexPath, fetchedRC: fetchedRC as! NSFetchedResultsController<NSFetchRequestResult>) {
-                    if let goal = fetchedRC?.object(at: indexPath) {
+                if validateIndexPath(IndexPath(row: indexPath.row + dayIndexPathRow(forSection: indexPath.section), section: indexPath.section), fetchedRC: fetchedRC as! NSFetchedResultsController<NSFetchRequestResult>) {
+                    if let goal = fetchedRC?.object(at: IndexPath(row: indexPath.row + dayIndexPathRow(forSection: indexPath.section), section: indexPath.section)) {
                         goalCaption.text = goal.caption
                         checkmarkButton.isSelected = goal.completed
                         self.goal = goal
@@ -175,10 +204,10 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
                     return UITableViewCell()
                 }
                 cell.taskNumber.image = UIImage(named: "\(indexPath.row + 1)-circle-filled")
-                if validateIndexPath(indexPath, fetchedRC: fetchedRC as! NSFetchedResultsController<NSFetchRequestResult>) {
-                    if let task = fetchedRC?.object(at: indexPath) {
-                        cell.taskCaption.tag = indexPath.row
-                        cell.checkmarkButton.tag = indexPath.row
+                cell.taskCaption.tag = indexPath.row + dayIndexPathRow(forSection: indexPath.section)
+                cell.checkmarkButton.tag = indexPath.row + dayIndexPathRow(forSection: indexPath.section)
+                if validateIndexPath(IndexPath(row: indexPath.row + dayIndexPathRow(forSection: indexPath.section), section: indexPath.section), fetchedRC: fetchedRC as! NSFetchedResultsController<NSFetchRequestResult>) {
+                    if let task = fetchedRC?.object(at: IndexPath(row: indexPath.row + dayIndexPathRow(forSection: indexPath.section), section: indexPath.section)) {
                         cell.taskCaption.text = task.caption
                         cell.checkmarkButton.isSelected = task.completed
 //                        TaskCustomStaticTableViewCell.currentIndexPath = indexPath.row
@@ -272,10 +301,11 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
     
     private func refresh() {
         let request = ToDo.fetchRequest() as NSFetchRequest<ToDo>
-        let sort    = NSSortDescriptor(key: #keyPath(ToDo.cd), ascending: true)
+        let sort    = NSSortDescriptor(key: #keyPath(ToDo.kind), ascending: true)
         request.sortDescriptors = [sort]
         fetchedRC = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: #keyPath(ToDo.kind), cacheName: nil)
         do {
+//            fetchedRC.delegate = self
             try fetchedRC.performFetch()
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
@@ -303,7 +333,14 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
 //extension TodayTableViewController: NSFetchedResultsControllerDelegate {
 //
 //    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-//        <#code#>
+//        switch type {
+//        case .insert:
+//            tableView.reloadData()
+//        case .update:
+//            tableView.reloadData()
+//        default:
+//            break
+//        }
 //    }
 //}
 

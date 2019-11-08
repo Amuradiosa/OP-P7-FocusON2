@@ -13,7 +13,7 @@ import CoreData
 //    func weDontHaveA(task: ToDo?) -> Bool
 //}
 
-class TodayTableViewController: UITableViewController, UITextFieldDelegate {
+class TodayTableViewController: UITableViewController, UITextViewDelegate {
     
    
     // MARK: - Variables
@@ -24,7 +24,11 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
     private let formatter = DateFormatter()
     private var selected: IndexPath!
     private var goal: ToDo!
-    let defaults = UserDefaults.standard
+//    var textChanged: ((String) -> Void)
+//
+//    func textChanged(action: @escaping (String) -> Void) {
+//        self.textChanged = action
+//    }
 //    let goalDayUserDefaultsKey = "goalKey"
 //    var savedGoalDayIndex: Int {
 //        get {
@@ -44,7 +48,8 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
     
     @IBOutlet weak var checkmarkButton: UIButton!
     
-    @IBOutlet weak var goalCaption: UITextField!
+    
+    @IBOutlet weak var goalCaption: UITextView!
     
     @IBOutlet weak var goalCustomCell: UITableViewCell!
     
@@ -54,24 +59,42 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
     // MARK: - Goal Cell actions
     @IBAction func checkButtonPressed(_ sender: Any) {
         checkmarkButton.isSelected = !checkmarkButton.isSelected
-        editingChanged(goalCaption)
+//        editingChanged(goalCaption)
+        textViewDidChange(goalCaption)
     }
     
-    @IBAction func editingChanged(_ sender: UITextField) {
+    func textViewDidChange(_ textView: UITextView) {
+        tableView.beginUpdates()
+        tableView.endUpdates()
         if WeDontHaveA(goal: goal) {
             let goal = ToDo(entity: ToDo.entity(), insertInto: context)
-            goal.caption = sender.text!
+            goal.caption = textView.text!
             goal.completed = checkmarkButton.isSelected
             goal.cd = Date()
             goal.kind = false
             appDelegate.saveContext()
             self.goal = goal
         } else {
-            goal.caption = sender.text!
+            goal.caption = textView.text!
             goal.completed = checkmarkButton.isSelected
             appDelegate.saveContext()
         }
     }
+//    @IBAction func editingChanged(_ sender: UITextField) {
+//        if WeDontHaveA(goal: goal) {
+//            let goal = ToDo(entity: ToDo.entity(), insertInto: context)
+//            goal.caption = sender.text!
+//            goal.completed = checkmarkButton.isSelected
+//            goal.cd = Date()
+//            goal.kind = false
+//            appDelegate.saveContext()
+//            self.goal = goal
+//        } else {
+//            goal.caption = sender.text!
+//            goal.completed = checkmarkButton.isSelected
+//            appDelegate.saveContext()
+//        }
+//    }
     
     
     
@@ -91,9 +114,9 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
     }
     
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-    }
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        textField.resignFirstResponder()
+//    }
     
     
     // MARK: - Configuration:
@@ -111,7 +134,13 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableView.automaticDimension
         // do the fetch request here for goals and tasks(using do catch block) and then store the data in the goals and tasks array to populate the tableview
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return UITableView.automaticDimension
     }
     
     private func configure() {
@@ -120,12 +149,45 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
         formatter.timeStyle = .none
         formatter.dateStyle = .short
         refresh()
-        
+        configureTextview()
+        configureTapGesture()
 //        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapEdit(_:)))
 //        tableView.addGestureRecognizer(tapGesture)
 //        tapGesture.delegate = self
         //print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
+    }
+    private func configureTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: Selector(("hideKeyboard")))
+        tapGesture.cancelsTouchesInView = true
+        tableView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func hideKeyboard() {
+        tableView.endEditing(true)
+    }
+    
+    //Textview congiguration:
+    private func configureTextview() {
+        if goalCaption.text.isEmpty {
+            goalCaption.text = "Set your goal..."
+            goalCaption.textColor = UIColor.lightGray
+        }
+    }
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Set your goal..."
+            textView.textColor = UIColor.lightGray
+        }
+    }
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+        textView.resignFirstResponder()
     }
 //    @objc func tapEdit(_ recognizer: UITapGestureRecognizer)  {
 //        if recognizer.state == .ended {
@@ -202,6 +264,12 @@ class TodayTableViewController: UITableViewController, UITextFieldDelegate {
             case 1:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as? TaskCustomStaticTableViewCell else {
                     return UITableViewCell()
+                }
+                cell.textChanged { [weak tableView] (newText: String) in
+                    DispatchQueue.main.async {
+                        tableView?.beginUpdates()
+                        tableView?.endUpdates()
+                    }
                 }
                 cell.taskNumber.image = UIImage(named: "\(indexPath.row + 1)-circle-filled")
                 cell.taskCaption.tag = indexPath.row + dayIndexPathRow(forSection: indexPath.section)

@@ -83,7 +83,7 @@
         <scene sceneID="zKM-aS-13y">
             <objects>
                 <tableViewController id="bgJ-PD-DA4" customClass="TodayTableViewController" customModule="FocusOn" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="hWx-aa-P14">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="static" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="hWx-aa-P14">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -97,16 +97,19 @@
                         <sections>
                             <tableViewSection headerTitle="Goal for the day to focus on:" id="TQM-c4-luE">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="customCell" id="2W7-ZY-sTO">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="customCell" id="2W7-ZY-sTO">
                                         <rect key="frame" x="0.0" y="99.5" width="414" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="2W7-ZY-sTO" id="aOg-jH-5tJ">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6la-i6-bDa">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6la-i6-bDa">
                                                     <rect key="frame" x="370" y="0.5" width="44" height="43.5"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="44" id="3qS-cK-YTB"/>
+                                                        <constraint firstAttribute="width" constant="44" id="GWn-zd-7Zj"/>
+                                                    </constraints>
                                                     <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <state key="normal" backgroundImage="circle" catalog="system"/>
                                                     <state key="selected" backgroundImage="checkmark.circle" catalog="system"/>
@@ -114,16 +117,23 @@
                                                         <action selector="checkButtonPressed:" destination="bgJ-PD-DA4" eventType="touchUpInside" id="zzD-Fh-oG9"/>
                                                     </connections>
                                                 </button>
-                                                <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="set your goal..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BTr-Gd-X4A">
-                                                    <rect key="frame" x="5" y="5" width="360" height="34"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Italic" family="Helvetica Neue" pointSize="17"/>
-                                                    <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
-                                                    <connections>
-                                                        <action selector="editingChanged:" destination="bgJ-PD-DA4" eventType="editingChanged" id="aFx-Li-RoZ"/>
-                                                    </connections>
-                                                </textField>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="LJR-zb-YmA">
+                                                    <rect key="frame" x="5" y="5" width="360" height="34.5"/>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                    <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                                    <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                </textView>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="6la-i6-bDa" secondAttribute="trailing" id="WXs-I3-YVC"/>
+                                                <constraint firstAttribute="bottom" secondItem="LJR-zb-YmA" secondAttribute="bottom" constant="4.5" id="Wwm-1H-afm"/>
+                                                <constraint firstItem="6la-i6-bDa" firstAttribute="top" secondItem="aOg-jH-5tJ" secondAttribute="top" id="XTv-U9-Jwe"/>
+                                                <constraint firstAttribute="trailing" secondItem="LJR-zb-YmA" secondAttribute="trailing" constant="49" id="gQU-v0-K7m"/>
+                                                <constraint firstItem="LJR-zb-YmA" firstAttribute="top" secondItem="aOg-jH-5tJ" secondAttribute="top" constant="5" id="mab-ca-n5I"/>
+                                                <constraint firstItem="LJR-zb-YmA" firstAttribute="leading" secondItem="aOg-jH-5tJ" secondAttribute="leading" constant="5" id="odY-AE-nos"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
@@ -165,7 +175,7 @@
                     <tabBarItem key="tabBarItem" title="Today" image="checkmark" catalog="system" selectedImage="checkmark" id="DgB-6R-ori"/>
                     <connections>
                         <outlet property="checkmarkButton" destination="6la-i6-bDa" id="Ycr-ku-E9V"/>
-                        <outlet property="goalCaption" destination="BTr-Gd-X4A" id="oeV-9c-YyT"/>
+                        <outlet property="goalCaption" destination="LJR-zb-YmA" id="w8W-zn-6MR"/>
                         <outlet property="goalCustomCell" destination="2W7-ZY-sTO" id="3nd-wt-ANe"/>
                     </connections>
                 </tableViewController>

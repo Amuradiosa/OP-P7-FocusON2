@@ -37,6 +37,7 @@ class TaskCustomStaticTableViewCell: UITableViewCell {
     private var fetchedRC: NSFetchedResultsController<ToDo>!
     private let formatter = DateFormatter()
     private var task: ToDo!
+    var textChanged: ((String) -> Void)?
 //    var tableView = TodayTableViewController()
 //    let defaults = UserDefaults.standard
 //    let tasksDayUserDefaultsKey = "taskKey"
@@ -78,7 +79,8 @@ class TaskCustomStaticTableViewCell: UITableViewCell {
     // MARK: - Outlets
     
     @IBOutlet weak var taskNumber: UIImageView!
-    @IBOutlet weak var taskCaption: UITextField!
+
+    @IBOutlet weak var taskCaption: UITextView!
     @IBOutlet weak var checkmarkButton: UIButton!
     
     
@@ -91,7 +93,7 @@ class TaskCustomStaticTableViewCell: UITableViewCell {
     
     
 }
-extension TaskCustomStaticTableViewCell: UITextFieldDelegate {
+extension TaskCustomStaticTableViewCell: UITextViewDelegate {
     
     // MARK: - Actions
     
@@ -113,24 +115,46 @@ extension TaskCustomStaticTableViewCell: UITextFieldDelegate {
 //    }
     
     
-    @IBAction func editingChanged(_ sender: UITextField) {
-        if isItTheSameDay(forThisTask: sender.tag) {
+    func textViewDidChange(_ textView: UITextView) {
+        textChanged?(textView.text)
+        if isItTheSameDay(forThisTask: textView.tag) {
             let newTask = ToDo(entity: ToDo.entity(), insertInto: context)
-            newTask.caption = sender.text!
+            newTask.caption = textView.text!
             newTask.completed = checkmarkButton.isSelected
             newTask.cd = Date()
             newTask.kind = true
             appDelegate.saveContext()
-            sender.tag += 3
-//            tableView.tableView.reloadData()
+            textView.tag += 3
+//          tableView.tableView.reloadData()
         } else {
-            let task = fetchedRC.object(at: IndexPath(row: sender.tag, section: 1))
-            task.caption = sender.text!
+            let task = fetchedRC.object(at: IndexPath(row: textView.tag, section: 1))
+            task.caption = textView.text!
             task.completed = checkmarkButton.isSelected
             appDelegate.saveContext()
         }
-        
     }
+    
+    func textChanged(action: @escaping (String) -> Void) {
+        self.textChanged = action
+    }
+//    @IBAction func editingChanged(_ sender: UITextField) {
+//        if isItTheSameDay(forThisTask: sender.tag) {
+//            let newTask = ToDo(entity: ToDo.entity(), insertInto: context)
+//            newTask.caption = sender.text!
+//            newTask.completed = checkmarkButton.isSelected
+//            newTask.cd = Date()
+//            newTask.kind = true
+//            appDelegate.saveContext()
+//            sender.tag += 3
+////            tableView.tableView.reloadData()
+//        } else {
+//            let task = fetchedRC.object(at: IndexPath(row: sender.tag, section: 1))
+//            task.caption = sender.text!
+//            task.completed = checkmarkButton.isSelected
+//            appDelegate.saveContext()
+//        }
+//
+//    }
     
 //    @IBAction func editingDidEnd(_ sender: UITextField) {
 ////        if weDontHaveA(task: task) {
@@ -207,11 +231,12 @@ extension TaskCustomStaticTableViewCell: UITextFieldDelegate {
     
     
     
-    
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+        textView.resignFirstResponder()
     }
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        textField.resignFirstResponder()
+//    }
     
     @IBAction func checkmarkButtonPressed(_ sender: UIButton) {
         checkmarkButton.isSelected = !checkmarkButton.isSelected
@@ -224,13 +249,37 @@ extension TaskCustomStaticTableViewCell: UITextFieldDelegate {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        taskCaption.delegate = self
-        formatter.dateFormat = "dd MM yyyy"
-        refresh()
+        configure()
 //        let tapGestureRecogniser = UITapGestureRecognizer(target: self, action: <#T##Selector?#>)
 //        taskcell?.delegate = self
 //        refresh()
         // Initialization code
+    }
+    private func configure() {
+        taskCaption.delegate = self
+        formatter.dateFormat = "dd MM yyyy"
+        refresh()
+        configureTextview()
+    }
+    private func configureTextview() {
+        taskCaption.delegate = self
+        if taskCaption.text.isEmpty {
+            taskCaption.text = "Set your goal..."
+            taskCaption.textColor = UIColor.lightGray
+        }
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            taskCaption.text = "Set your goal..."
+            taskCaption.textColor = UIColor.lightGray
+        }
     }
     
     

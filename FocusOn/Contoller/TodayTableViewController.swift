@@ -24,6 +24,7 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
     private let formatter = DateFormatter()
     private var selected: IndexPath!
     private var goal: ToDo!
+    let taskCell = TaskCustomStaticTableViewCell()
 //    var textChanged: ((String) -> Void)
 //
 //    func textChanged(action: @escaping (String) -> Void) {
@@ -61,6 +62,68 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
         checkmarkButton.isSelected = !checkmarkButton.isSelected
 //        editingChanged(goalCaption)
         textViewDidChange(goalCaption)
+        if checkmarkButton.isSelected == true {
+            displayAlertAnimation(title: "Well Done 🥳", message: "Congrats on achieving your goal!")
+        } else {
+            displayAlertAnimation(title: "ah, no biggie, you’ll get it next time!", message: "")
+        }
+        
+    }
+    
+    func displayAlertAnimation(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        self.present(alert, animated: true)
+        let when = DispatchTime.now() + 1
+        DispatchQueue.main.asyncAfter(deadline: when){
+          // your code with delay
+          alert.dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    func displayAlertAction() {
+        let alert = UIAlertController(title: "Your goal has not been achived yet!", message: "Would you like to re-list it as today's goal?", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "No", style: .default, handler: { (action) in
+            self.goalCaption.text = ""
+            let goal = ToDo(entity: ToDo.entity(), insertInto: self.context)
+            goal.caption = ""
+            goal.kind = false
+            goal.cd = self.removeTimeStamp(fromDate: Date())
+            goal.completed = false
+            self.appDelegate.saveContext()
+            self.goal = goal
+            for _ in 0...2 {
+                let newTask = ToDo(entity: ToDo.entity(), insertInto: self.context)
+                newTask.caption = ""
+                newTask.completed = false
+                newTask.cd = self.removeTimeStamp(fromDate: Date())
+                newTask.kind = true
+                self.appDelegate.saveContext()
+                self.refresh()
+            }
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1), IndexPath(row: 1, section: 1), IndexPath(row: 2, section: 1)], with: .automatic)
+//            self.tableView.reloadData()
+            // see tommorow if you need this one or not
+//            self.taskCell.textViewDidChange(self.taskCell.taskCaption)
+        }))
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action) in
+            let goal = self.fetchedRC?.object(at: IndexPath(row: self.dayIndexPathRow(forSection: 0), section: 0))
+            goal?.cd = self.removeTimeStamp(fromDate: Date())
+            self.appDelegate.saveContext()
+            self.goal = goal
+            for indexPathRow in 0...2 {
+                let task = self.fetchedRC?.object(at: IndexPath(row: indexPathRow + self.dayIndexPathRow(forSection: 1), section: 1))
+                task?.cd = self.removeTimeStamp(fromDate: Date())
+                self.appDelegate.saveContext()
+            }
+        }))
+        self.present(alert, animated: true)
+    }
+    
+    public func removeTimeStamp(fromDate: Date) -> Date {
+        guard let date = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month, .day], from: fromDate)) else {
+            fatalError("Failed to strip time from Date object")
+        }
+        return date
     }
     
     func textViewDidChange(_ textView: UITextView) {
@@ -70,7 +133,7 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
             let goal = ToDo(entity: ToDo.entity(), insertInto: context)
             goal.caption = textView.text!
             goal.completed = checkmarkButton.isSelected
-            goal.cd = Date()
+            goal.cd = removeTimeStamp(fromDate: Date())
             goal.kind = false
             appDelegate.saveContext()
             self.goal = goal
@@ -136,7 +199,15 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
         super.viewWillAppear(animated)
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableView.automaticDimension
+//        tableView.reloadData()
         // do the fetch request here for goals and tasks(using do catch block) and then store the data in the goals and tasks array to populate the tableview
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        if WeDontHaveA(goal: goal) {
+            if goal.completed == false {
+                displayAlertAction()
+            }
+        }
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -373,7 +444,7 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
         request.sortDescriptors = [sort]
         fetchedRC = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: #keyPath(ToDo.kind), cacheName: nil)
         do {
-//            fetchedRC.delegate = self
+            fetchedRC.delegate = self
             try fetchedRC.performFetch()
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
@@ -398,17 +469,20 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
 
 // Fetched Results Controller delegate:
 
-//extension TodayTableViewController: NSFetchedResultsControllerDelegate {
-//
-//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-//        switch type {
-//        case .insert:
-//            tableView.reloadData()
-//        case .update:
-//            tableView.reloadData()
-//        default:
-//            break
-//        }
-//    }
-//}
+extension TodayTableViewController: NSFetchedResultsControllerDelegate {
 
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        let index = indexPath ?? (newIndexPath ?? nil)
+        guard let cellIndex = index else {
+          return
+        }
+        switch type {
+        case .update:
+            checkmarkButton.isSelected = goal.completed
+        default:
+            break
+        }
+    }
+    
+
+}

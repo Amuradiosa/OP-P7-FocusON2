@@ -113,15 +113,20 @@ extension TaskCustomStaticTableViewCell: UITextViewDelegate {
 //            appDelegate.saveContext()
 //        }
 //    }
-    
+    public func removeTimeStamp(fromDate: Date) -> Date {
+        guard let date = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month, .day], from: fromDate)) else {
+            fatalError("Failed to strip time from Date object")
+        }
+        return date
+    }
     
     func textViewDidChange(_ textView: UITextView) {
         textChanged?(textView.text)
-        if isItTheSameDay(forThisTask: textView.tag) {
+        if isItNotTheSameDay(forThisTask: textView.tag) {
             let newTask = ToDo(entity: ToDo.entity(), insertInto: context)
             newTask.caption = textView.text!
             newTask.completed = checkmarkButton.isSelected
-            newTask.cd = Date()
+            newTask.cd = removeTimeStamp(fromDate: Date())
             newTask.kind = true
             appDelegate.saveContext()
             textView.tag += 3
@@ -136,6 +141,10 @@ extension TaskCustomStaticTableViewCell: UITextViewDelegate {
     
     func textChanged(action: @escaping (String) -> Void) {
         self.textChanged = action
+    }
+    
+    func ereaseTasksCells() {
+        
     }
 //    @IBAction func editingChanged(_ sender: UITextField) {
 //        if isItTheSameDay(forThisTask: sender.tag) {
@@ -184,7 +193,7 @@ extension TaskCustomStaticTableViewCell: UITextViewDelegate {
 //        }
 //    }
         
-    func isItTheSameDay(forThisTask: Int) -> Bool {
+    func isItNotTheSameDay(forThisTask: Int) -> Bool {
 //            if let tasks = fetchedRC.sections?[1].objects as? [ToDo] {
 //                let task = tasks.first
         refresh()
@@ -243,7 +252,62 @@ extension TaskCustomStaticTableViewCell: UITextViewDelegate {
         let task = fetchedRC.object(at: IndexPath(row: sender.tag, section: 1))
         task.completed = checkmarkButton.isSelected
         appDelegate.saveContext()
+        if isAllTasksCompleted() {
+            displayAlertAction()
+        } else {
+        if checkmarkButton.isSelected == true {
+            let alert = UIAlertController(title: "Great job on making progress! 👍🏻", message: nil, preferredStyle: UIAlertController.Style.alert)
+            UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+            let when = DispatchTime.now() + 1
+            DispatchQueue.main.asyncAfter(deadline: when){
+              alert.dismiss(animated: true, completion: nil)
+            }
+        }
+        }
+//           let todaysGoalIndex = (fetchedRC.sections?[0].numberOfObjects)! - 1
+//            let goal = fetchedRC.object(at: IndexPath(row: todaysGoalIndex, section: 0))
+//            goal.completed = true
+        
+        }
+    func displayAlertAction() {
+            let alert = UIAlertController(title: "You've marked all tasks as completed", message: "Would you like to mark goal as completed too?", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action) in
+                let todaysGoalIndex = (self.fetchedRC.sections?[0].numberOfObjects)! - 1
+                let goal = self.fetchedRC.object(at: IndexPath(row: todaysGoalIndex, section: 0))
+                goal.completed = true
+            }))
+            UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+        }
+    
+    func isAllTasksCompleted() -> Bool {
+        let todaysFirstTaskIndex = (fetchedRC.sections?[1].numberOfObjects)! - 3
+        let todaysLastTaskIndex = (fetchedRC.sections?[1].numberOfObjects)! - 1
+        let todaysTasksCount = todaysLastTaskIndex - todaysFirstTaskIndex + 1
+        var numberOfCompletedTasks = 0
+        for taskIndexPathRow in todaysFirstTaskIndex...todaysLastTaskIndex {
+            let task = fetchedRC.object(at: IndexPath(row: taskIndexPathRow, section: 1))
+            if task.completed == true {
+                numberOfCompletedTasks += 1
+                if numberOfCompletedTasks == todaysTasksCount {
+                    return true
+                }
+            }
+        }
+        return false
     }
+    
+//        func displayAlertAnimation() {
+//            let alert = UIAlertController(title: "Well Done 🥳", message: "Congrats on achieving your goal!", preferredStyle: UIAlertController.Style.alert)
+//            Present(alert, animated: true)
+//
+//            let when = DispatchTime.now() + 2
+//            DispatchQueue.main.asyncAfter(deadline: when){
+//              // your code with delay
+//              alert.dismiss(animated: true, completion: nil)
+//            }
+//        }
+//
     
     // MARK: - Configuration
     
@@ -311,6 +375,19 @@ extension TaskCustomStaticTableViewCell: UITextViewDelegate {
 //
 //    }
 }
+
+//extension UIView {
+//    var parentViewController: UIViewController? {
+//        var parentResponder: UIResponder? = self
+//        while parentResponder != nil {
+//            parentResponder = parentResponder!.next
+//            if parentResponder is UIViewController {
+//                return parentResponder as? UIViewController
+//            }
+//        }
+//        return nil
+//    }
+//}
 
 
 

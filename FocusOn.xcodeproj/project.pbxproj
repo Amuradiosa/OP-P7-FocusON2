@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		15521CC5237819970031EA20 /* HistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15521CC4237819970031EA20 /* HistoryTableViewCell.swift */; };
 		15706676235231D000DF3D02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15706675235231D000DF3D02 /* AppDelegate.swift */; };
 		15706678235231D000DF3D02 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15706677235231D000DF3D02 /* SceneDelegate.swift */; };
 		1570667D235231D000DF3D02 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1570667B235231D000DF3D02 /* Main.storyboard */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		15521CC4237819970031EA20 /* HistoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTableViewCell.swift; sourceTree = "<group>"; };
 		15706672235231D000DF3D02 /* FocusOn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FocusOn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		15706675235231D000DF3D02 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		15706677235231D000DF3D02 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 			children = (
 				157066B22365AAD600DF3D02 /* TaskCustomStaticTableViewCell.swift */,
 				157066B32365AAD600DF3D02 /* TaskCustomStaticTableViewCell.xib */,
+				15521CC4237819970031EA20 /* HistoryTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -212,6 +215,7 @@
 				157066B42365AAD600DF3D02 /* TaskCustomStaticTableViewCell.swift in Sources */,
 				15706680235231D000DF3D02 /* FocusOn.xcdatamodeld in Sources */,
 				15706676235231D000DF3D02 /* AppDelegate.swift in Sources */,
+				15521CC5237819970031EA20 /* HistoryTableViewCell.swift in Sources */,
 				15706693235334D900DF3D02 /* ProgressViewController.swift in Sources */,
 				157066F1236DE17000DF3D02 /* ToDo+CoreDataClass.swift in Sources */,
 				157066F2236DE17000DF3D02 /* ToDo+CoreDataProperties.swift in Sources */,

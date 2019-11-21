@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		15521CC5237819970031EA20 /* HistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15521CC4237819970031EA20 /* HistoryTableViewCell.swift */; };
+		15521CD3237C4F740031EA20 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15521CCC237C4E940031EA20 /* Charts.framework */; };
+		15521CD4237C4F740031EA20 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 15521CCC237C4E940031EA20 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		15521CE0237E97710031EA20 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15521CDF237E97710031EA20 /* DataController.swift */; };
 		15706676235231D000DF3D02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15706675235231D000DF3D02 /* AppDelegate.swift */; };
 		15706678235231D000DF3D02 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15706677235231D000DF3D02 /* SceneDelegate.swift */; };
 		1570667D235231D000DF3D02 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1570667B235231D000DF3D02 /* Main.storyboard */; };
@@ -23,8 +26,41 @@
 		157066F2236DE17000DF3D02 /* ToDo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157066F0236DE17000DF3D02 /* ToDo+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		15521CCB237C4E940031EA20 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 15521CC6237C4E930031EA20 /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 65AD9E95D9ED4DC0BD73A743;
+			remoteInfo = Charts;
+		};
+		15521CCD237C4E940031EA20 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 15521CC6237C4E930031EA20 /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1CBBC58C6CE1EBEE9852CE41;
+			remoteInfo = ChartsTests;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		15521CD5237C4F750031EA20 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				15521CD4237C4F740031EA20 /* Charts.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		15521CC4237819970031EA20 /* HistoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTableViewCell.swift; sourceTree = "<group>"; };
+		15521CC6237C4E930031EA20 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = "Charts-master/Charts.xcodeproj"; sourceTree = "<group>"; };
+		15521CDF237E97710031EA20 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DataController.swift; path = FocusOn/Cells/DataController.swift; sourceTree = SOURCE_ROOT; };
 		15706672235231D000DF3D02 /* FocusOn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FocusOn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		15706675235231D000DF3D02 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		15706677235231D000DF3D02 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -47,17 +83,36 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15521CD3237C4F740031EA20 /* Charts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		15521CC7237C4E930031EA20 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				15521CCC237C4E940031EA20 /* Charts.framework */,
+				15521CCE237C4E940031EA20 /* ChartsTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		15521CCF237C4EC60031EA20 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		15706669235231CF00DF3D02 = {
 			isa = PBXGroup;
 			children = (
+				15521CC6237C4E930031EA20 /* Charts.xcodeproj */,
 				15706674235231D000DF3D02 /* FocusOn */,
 				15706673235231D000DF3D02 /* Products */,
+				15521CCF237C4EC60031EA20 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -105,6 +160,7 @@
 		157066942356156400DF3D02 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				15521CDF237E97710031EA20 /* DataController.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -149,6 +205,7 @@
 				1570666E235231D000DF3D02 /* Sources */,
 				1570666F235231D000DF3D02 /* Frameworks */,
 				15706670235231D000DF3D02 /* Resources */,
+				15521CD5237C4F750031EA20 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -185,12 +242,35 @@
 			mainGroup = 15706669235231CF00DF3D02;
 			productRefGroup = 15706673235231D000DF3D02 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 15521CC7237C4E930031EA20 /* Products */;
+					ProjectRef = 15521CC6237C4E930031EA20 /* Charts.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				15706671235231D000DF3D02 /* FocusOn */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		15521CCC237C4E940031EA20 /* Charts.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Charts.framework;
+			remoteRef = 15521CCB237C4E940031EA20 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		15521CCE237C4E940031EA20 /* ChartsTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ChartsTests.xctest;
+			remoteRef = 15521CCD237C4E940031EA20 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		15706670235231D000DF3D02 /* Resources */ = {
@@ -216,6 +296,7 @@
 				15706680235231D000DF3D02 /* FocusOn.xcdatamodeld in Sources */,
 				15706676235231D000DF3D02 /* AppDelegate.swift in Sources */,
 				15521CC5237819970031EA20 /* HistoryTableViewCell.swift in Sources */,
+				15521CE0237E97710031EA20 /* DataController.swift in Sources */,
 				15706693235334D900DF3D02 /* ProgressViewController.swift in Sources */,
 				157066F1236DE17000DF3D02 /* ToDo+CoreDataClass.swift in Sources */,
 				157066F2236DE17000DF3D02 /* ToDo+CoreDataProperties.swift in Sources */,

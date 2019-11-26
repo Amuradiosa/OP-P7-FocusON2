@@ -16,157 +16,113 @@ class ProgressViewController: UIViewController {
     
     @IBOutlet weak var timeSegment: UISegmentedControl!
     
-    
     @IBAction func timeSegmentValueChanged(_ sender: Any) {
-//        setData(data.monthlyAchivedGoals(), range: UInt32(data.totalGoals()))
+        configure()
     }
+    
     @IBOutlet weak var chartView: BarChartView!
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-//        didSet {
-//            configure()
-//            let monthlyAchievedGoals = data.totalNumberOfAchievedGoals()
-//            let totalGoals = data.totalGoals()
-//
-//
-//            chartView.data = {
-//                let dataSet1 = BarChartDataSet(
-//                    entries:
-//                          monthlyAchievedGoals
-//                          .enumerated()
-//                          .map{
-//                            (arg) -> BarChartDataEntry in let (dayIndex, total) = arg; return BarChartDataEntry(
-//                                x: Double(total + 1),
-//                              y: Double(total)
-//                            )
-//                          },
-//                        label: nil
-//                      )
-//                        let dataSet2 = BarChartDataSet(
-//                        entries:
-//                              monthlyAchievedGoals
-//                              .enumerated()
-//                              .map{
-//                                (arg) -> BarChartDataEntry in let (dayIndex, total) = arg; return BarChartDataEntry(
-//                                  x: Double(total),
-//                                  y: Double(totalGoals)
-//                                )
-//                              },
-//                            label: nil
-//                          )
-//                        dataSet2.colors = [.blue]
-//                      let data = BarChartData(dataSets: [dataSet1,dataSet2])
-//                      return data
-//                    }()
-//
-//      }
-//    }
-//
-//                monthlyAchievedGoals.enumerated().map {(arg) -> ChartData([Double:Double]) in
-//
-//
-//
-//
-//
-//                    let (indexMonth, monthly) = arg
-//                    return BarChartDataEntry(
-//                    x: Double(indexMonth),
-//                    y: monthly
-//                    )
-//
-//                }
-//
-//
-//                }
-//            }
-    
-    var labels = [String]()
     var completedGoals = [Double]()
     var totalGoals = [Double]()
-    var goalDataSet: BarChartData!
-    
+    let months = ["Jan", "Feb", "Mar", "Apr", "May","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
+    let weeks = ["Week 1","Week 2","Week 3","Week 4"]
     
     func configure() {
-        
-        chartView.chartDescription?.enabled = false
-        chartView.legend.enabled = false
-        chartView.isUserInteractionEnabled = false
-        for axis in [XAxis(), YAxis()] {
-            axis.drawAxisLineEnabled = false
-            axis.drawGridLinesEnabled = false
-        }
-        chartView.rightAxis.enabled = false
-        
         chartView.delegate = self as? ChartViewDelegate
-        
+        chartView.isUserInteractionEnabled = false
         chartView.drawBarShadowEnabled = false
         chartView.drawValueAboveBarEnabled = false
-        chartView.barData?.barWidth = 0.2
-        
-        
-    }
-    func setData(_ count: Int, range: UInt32) {
-        let start = 1
-        
-        let yVals = (start..<data.totalGoals()).map { (i) -> BarChartDataEntry in
-            let mult = range + 1
-            let val = Double(arc4random_uniform(mult))
-            if arc4random_uniform(100) < 25 {
-                return BarChartDataEntry(x: Double(i), y: val, icon: UIImage(named: "icon"))
-            } else {
-                return BarChartDataEntry(x: Double(i), y: val)
-            }
-        }
-        
-        var set1: BarChartDataSet! = nil
-        if let set = chartView.data?.dataSets.first as? BarChartDataSet {
-            set1 = set
-            set1.replaceEntries(yVals)
-            chartView.data?.notifyDataChanged()
-            chartView.notifyDataSetChanged()
-        } else {
-            set1 = BarChartDataSet(entries: yVals, label: "The year 2019")
-            set1.colors = ChartColorTemplates.material()
-            set1.drawValuesEnabled = false
-            
-            let data = BarChartData(dataSet: set1)
-            data.setValueFont(UIFont(name: "HelveticaNeue-Light", size: 10)!)
-            data.barWidth = 0.9
-            chartView.data = data
-        }
-        
-        
-        
+        chartView.rightAxis.enabled = false
 
+        if timeSegment.selectedSegmentIndex == 0 {
+            let xAxis = chartView.xAxis
+            xAxis.drawGridLinesEnabled = false
+            xAxis.labelPosition = .bottom
+            xAxis.centerAxisLabelsEnabled = true
+            xAxis.valueFormatter = IndexAxisValueFormatter(values:months)
+            xAxis.granularity = 1
+            xAxis.labelCount = 12
+            
+            let leftAxisFormatter = NumberFormatter()
+            leftAxisFormatter.maximumFractionDigits = 1
+            
+            let yaxis = chartView.leftAxis
+            yaxis.spaceTop = 0.35
+            yaxis.axisMinimum = 0
+            yaxis.drawGridLinesEnabled = false
+            setChartForMonths()
+
+        } else {
+            let xAxis = chartView.xAxis
+            xAxis.drawGridLinesEnabled = false
+            xAxis.labelPosition = .bottom
+            xAxis.centerAxisLabelsEnabled = true
+            xAxis.valueFormatter = IndexAxisValueFormatter(values:weeks)
+            xAxis.granularity = 1
+            xAxis.labelCount = 4
+            
+            let leftAxisFormatter = NumberFormatter()
+            leftAxisFormatter.maximumFractionDigits = 1
+            
+            let yaxis = chartView.leftAxis
+            yaxis.spaceTop = 0.35
+            yaxis.axisMinimum = 0
+            yaxis.drawGridLinesEnabled = false
+            setChartForWeeks()
+        }
     }
     
+    func setChartForMonths() {
+        var dataEntries1 = [BarChartDataEntry]()
+        var dataEntries2 = [BarChartDataEntry]()
+        let xValuesForTotalGoals = [0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5]
+
+        totalGoals = data.monthly(goals: data.allGoalsObjects(achieved: false))
+        completedGoals = data.monthly(goals: data.allGoalsObjects(achieved: true))
+        for i in 0..<months.count {
+            dataEntries1.append(BarChartDataEntry(x: xValuesForTotalGoals[i], y: totalGoals[i]))
+            dataEntries2.append(BarChartDataEntry(x: Double(i), y: completedGoals[i]))
+        }
+        let chartDataSet1 = BarChartDataSet(entries: dataEntries1, label: "Total Number Of Goals")
+        let chartDataSet2 = BarChartDataSet(entries: dataEntries2, label: "Completed Goals")
+        chartDataSet1.colors = [UIColor.black]
+        chartDataSet1.valueTextColor = UIColor.white
+        chartDataSet2.colors = [UIColor.gray]
+        let chartData = BarChartData(dataSets: [chartDataSet1, chartDataSet2])
+        let barWidth = 0.5
+        chartData.barWidth = barWidth
+        chartView.notifyDataSetChanged()
+        chartView.data = chartData
+        chartView.animate(xAxisDuration: 1.5, yAxisDuration: 1.5, easingOption: .linear)
+    }
     
+    func setChartForWeeks() {
+        var dataEntries1 = [BarChartDataEntry]()
+        var dataEntries2 = [BarChartDataEntry]()
+        let xValuesForTotalGoals = [0.5,1.5,2.5,3.5]
+
+        totalGoals = data.weekly(goals: data.allGoalsObjects(achieved: false))
+        completedGoals = data.weekly(goals: data.allGoalsObjects(achieved: true))
+        for i in 0..<weeks.count {
+            dataEntries1.append(BarChartDataEntry(x: xValuesForTotalGoals[i], y: totalGoals[i]))
+            dataEntries2.append(BarChartDataEntry(x: Double(i), y: completedGoals[i]))
+        }
+        let chartDataSet1 = BarChartDataSet(entries: dataEntries1, label: "Total Number Of Goals")
+        let chartDataSet2 = BarChartDataSet(entries: dataEntries2, label: "Completed Goals")
+        chartDataSet1.colors = [UIColor.black]
+        chartDataSet1.valueTextColor = UIColor.white
+        chartDataSet2.colors = [UIColor.gray]
+        let chartData = BarChartData(dataSets: [chartDataSet1, chartDataSet2])
+        let barWidth = 0.5
+        chartData.barWidth = barWidth
+        chartView.notifyDataSetChanged()
+        chartView.data = chartData
+        chartView.animate(xAxisDuration: 1.5, yAxisDuration: 1.5, easingOption: .linear)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
-//        setData(data.monthlyAchivedGoals, range: UInt32(data.totalGoals()))
-        // Do any additional setup after loading the view.
     }
     
-    
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

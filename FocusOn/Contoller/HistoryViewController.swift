@@ -12,7 +12,9 @@ import CoreData
 
 class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-
+    @IBOutlet weak var currentMonth: UILabel!
+    
+    @IBOutlet weak var totalNumberOfAchievedGoals: UILabel!
     
     
     
@@ -25,6 +27,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     private let context  = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     private var fetchedRC: NSFetchedResultsController<ToDo>!
     private let formatter = DateFormatter()
+    let data = DataController()
     
     
     func configure() {
@@ -33,6 +36,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         refresh()
         formatter.dateStyle = .long
         formatter.timeStyle = .none
+        currentMonth.text = formatter.string(from: removeTimeStamp(fromDate: Date()))
+        totalNumberOfAchievedGoals.text = "\(data.allGoalsObjects(achieved: true).count) out of \(data.allGoalsObjects(achieved: false).count) goals completed"
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -118,9 +123,14 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         
     }
     
-    
     // MARK: - Secondary helper functions:
     
+    public func removeTimeStamp(fromDate: Date) -> Date {
+        guard let date = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: fromDate)) else {
+            fatalError("Failed to strip time from Date object")
+        }
+        return date
+    }
     
     /*
     // MARK: - Navigation

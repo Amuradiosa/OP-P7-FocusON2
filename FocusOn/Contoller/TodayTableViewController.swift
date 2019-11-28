@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import UserNotifications
 
 //protocol todaysTasksDelegate {
 //    func weDontHaveA(task: ToDo?) -> Bool
@@ -176,12 +177,6 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
         }
     }
     
-    
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        textField.resignFirstResponder()
-//    }
-    
-    
     // MARK: - Configuration:
     
     override func viewDidLoad() {
@@ -208,6 +203,7 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
                 displayAlertAction()
             }
         }
+        manageLocalNotifications()
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -463,19 +459,51 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
     // MARK: - Secondary helper functions:
     
     
-
+    // MARK: - Notifications
+    func manageLocalNotifications() {
+        var title: String?
+        var body: String?
+        if WeDontHaveA(goal: goal) {
+            title = "It's the time now"
+            body = "You need to set your goal for today"
+        } else {
+            title = "Come on buddy"
+            body = "Don't forget you have a goal to achieve today"
+        }
+        scheduleLocalNotification(title: title, body: body)
+    }
+    
+    func scheduleLocalNotification(title: String?, body: String?) {
+        let identifier = "goalsListSummary"
+        let notificationCenter = UNUserNotificationCenter.current()
+        // remove previously scheduled notifications
+        notificationCenter.removeDeliveredNotifications(withIdentifiers: [identifier])
+        if let newTitle = title, let newBody = body {
+            // create content
+            let content = UNMutableNotificationContent()
+            content.title = newTitle
+            content.body = newBody
+            content.sound = UNNotificationSound.default
+            // create trigger
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10800, repeats: true)
+            // create request
+            let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+            // schedule notification
+            notificationCenter.add(request, withCompletionHandler: nil)
+        }
+        
+    }
 
 }
+
+
+
 
 // Fetched Results Controller delegate:
 
 extension TodayTableViewController: NSFetchedResultsControllerDelegate {
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        let index = indexPath ?? (newIndexPath ?? nil)
-        guard let cellIndex = index else {
-          return
-        }
         switch type {
         case .update:
             checkmarkButton.isSelected = goal.completed

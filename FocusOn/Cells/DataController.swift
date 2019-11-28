@@ -17,6 +17,8 @@ class DataController: NSManagedObject {
     private var fetchedRC: NSFetchedResultsController<ToDo>!
     private let formatter = DateFormatter()
 
+    
+    
     func allGoalsObjects(achieved: Bool) -> [ToDo] {
         refresh()
         let allGoals = fetchedRC.sections?[0].objects as? [ToDo]

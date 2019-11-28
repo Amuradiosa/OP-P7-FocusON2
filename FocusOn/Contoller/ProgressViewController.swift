@@ -11,9 +11,11 @@ import Charts
 import CoreData
 
 class ProgressViewController: UIViewController {
-    
     let data = DataController()
-    
+    private let formatter = DateFormatter()
+
+    @IBOutlet weak var currentDate: UILabel!
+
     @IBOutlet weak var timeSegment: UISegmentedControl!
     
     @IBAction func timeSegmentValueChanged(_ sender: Any) {
@@ -119,10 +121,28 @@ class ProgressViewController: UIViewController {
         chartView.data = chartData
         chartView.animate(xAxisDuration: 1.5, yAxisDuration: 1.5, easingOption: .linear)
     }
-
+    
+    func configureDate() {
+        formatter.dateStyle = .long
+        formatter.timeStyle = .none
+        currentDate.text = formatter.string(from: Date())
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
+        configureDate()
+        print(data.monthly(goals: data.allGoalsObjects(achieved: true)))
+            
+        print(data.monthly(goals: data.allGoalsObjects(achieved: false)))
+            
+            
+        print(data.weekly(goals: data.allGoalsObjects(achieved: true)))
+            
+        print(data.weekly(goals: data.allGoalsObjects(achieved: false)))
+
+
+
     }
     
 }

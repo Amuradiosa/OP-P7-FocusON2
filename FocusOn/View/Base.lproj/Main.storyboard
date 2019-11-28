@@ -15,27 +15,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="36" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="azE-Xv-HI4">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="36" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="azE-Xv-HI4">
+                                <rect key="frame" x="0.0" y="134" width="414" height="762"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <label key="tableHeaderView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Focus History" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="74n-Fc-uJW">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="24"/>
-                                    <nil key="textColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" accessoryType="checkmark" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="toDoCell" id="KFk-b8-FDR" customClass="HistoryTableViewCell" customModule="FocusOn" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="72" width="414" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" accessoryType="checkmark" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="toDoCell" rowHeight="32" id="KFk-b8-FDR" customClass="HistoryTableViewCell" customModule="FocusOn" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="32"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="KFk-b8-FDR" id="NXi-WB-DPE">
-                                            <rect key="frame" x="0.0" y="0.0" width="370" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="370" height="32"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A7b-qV-mKY">
-                                                    <rect key="frame" x="10" y="0.0" width="20" height="44"/>
+                                                    <rect key="frame" x="10" y="0.0" width="350" height="32"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Italic" family="Helvetica Neue" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -55,13 +47,56 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Focus History" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="74n-Fc-uJW">
+                                <rect key="frame" x="0.0" y="44" width="414" height="28"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="24"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WAz-gY-3RR">
+                                <rect key="frame" x="0.0" y="72" width="414" height="28"/>
+                                <color key="backgroundColor" red="0.89804524183273315" green="0.89802831411361694" blue="0.89803975820541382" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="28" id="0lv-aa-5oz"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nmP-px-DTX">
+                                <rect key="frame" x="0.0" y="100" width="414" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="9Hj-1P-ghm"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="azE-Xv-HI4" firstAttribute="trailing" secondItem="0Mo-wi-lzU" secondAttribute="trailing" id="1sF-u1-GLt"/>
+                            <constraint firstItem="azE-Xv-HI4" firstAttribute="top" secondItem="nmP-px-DTX" secondAttribute="bottom" id="4Xf-C0-RPx"/>
+                            <constraint firstItem="WAz-gY-3RR" firstAttribute="leading" secondItem="0Mo-wi-lzU" secondAttribute="leading" id="8WV-un-zRQ"/>
+                            <constraint firstItem="WAz-gY-3RR" firstAttribute="trailing" secondItem="0Mo-wi-lzU" secondAttribute="trailing" id="DtW-oB-pGT"/>
+                            <constraint firstItem="74n-Fc-uJW" firstAttribute="centerX" secondItem="cY3-8B-yOf" secondAttribute="centerX" id="FQh-l3-3jS"/>
+                            <constraint firstItem="74n-Fc-uJW" firstAttribute="trailing" secondItem="0Mo-wi-lzU" secondAttribute="trailing" id="Gxs-B0-Oed"/>
+                            <constraint firstItem="nmP-px-DTX" firstAttribute="top" secondItem="WAz-gY-3RR" secondAttribute="bottom" id="WN4-Fz-R3V"/>
+                            <constraint firstItem="74n-Fc-uJW" firstAttribute="leading" secondItem="0Mo-wi-lzU" secondAttribute="leading" id="cXi-XA-BIl"/>
+                            <constraint firstItem="WAz-gY-3RR" firstAttribute="top" secondItem="74n-Fc-uJW" secondAttribute="bottom" id="kcR-Bx-I33"/>
+                            <constraint firstItem="74n-Fc-uJW" firstAttribute="top" secondItem="0Mo-wi-lzU" secondAttribute="top" id="nFr-sm-tq4"/>
+                            <constraint firstItem="nmP-px-DTX" firstAttribute="leading" secondItem="0Mo-wi-lzU" secondAttribute="leading" id="rMe-2i-GXe"/>
+                            <constraint firstAttribute="bottom" secondItem="azE-Xv-HI4" secondAttribute="bottom" id="rpc-UF-wkR"/>
+                            <constraint firstItem="azE-Xv-HI4" firstAttribute="leading" secondItem="0Mo-wi-lzU" secondAttribute="leading" id="zHa-6W-Vg1"/>
+                            <constraint firstItem="nmP-px-DTX" firstAttribute="trailing" secondItem="0Mo-wi-lzU" secondAttribute="trailing" id="zYL-r5-ouq"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="0Mo-wi-lzU"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="History" image="list.bullet" catalog="system" selectedImage="list.bullet" id="jvp-L5-S3h"/>
                     <connections>
+                        <outlet property="currentMonth" destination="WAz-gY-3RR" id="ciJ-Sq-NEf"/>
                         <outlet property="tableView" destination="azE-Xv-HI4" id="xbm-sv-Sh9"/>
+                        <outlet property="totalNumberOfAchievedGoals" destination="nmP-px-DTX" id="huh-oz-Lsc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7R2-3X-SQa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -121,6 +156,7 @@
                     <tabBarItem key="tabBarItem" title="Progress" image="chart.bar" catalog="system" selectedImage="chart.bar" id="I4H-L9-fwt"/>
                     <connections>
                         <outlet property="chartView" destination="30a-41-RY6" id="rjx-ZK-UO1"/>
+                        <outlet property="currentDate" destination="pxM-9O-Y7w" id="DFs-Sv-VLo"/>
                         <outlet property="timeSegment" destination="4Vo-tL-e3F" id="wK0-JJ-UMf"/>
                     </connections>
                 </viewController>
@@ -139,7 +175,7 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
-                        <segue destination="HCL-OS-En8" kind="relationship" relationship="viewControllers" id="0JF-jW-pFX"/>
+                        <segue destination="HCL-OS-En8" kind="relationship" relationship="viewControllers" id="6ap-to-U0f"/>
                         <segue destination="bgJ-PD-DA4" kind="relationship" relationship="viewControllers" id="IWb-0m-GbS"/>
                         <segue destination="Vj9-H7-VUd" kind="relationship" relationship="viewControllers" id="7kw-IK-Dy5"/>
                     </connections>

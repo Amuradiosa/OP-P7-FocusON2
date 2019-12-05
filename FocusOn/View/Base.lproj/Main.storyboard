@@ -79,7 +79,6 @@
                             <constraint firstItem="azE-Xv-HI4" firstAttribute="top" secondItem="nmP-px-DTX" secondAttribute="bottom" id="4Xf-C0-RPx"/>
                             <constraint firstItem="WAz-gY-3RR" firstAttribute="leading" secondItem="0Mo-wi-lzU" secondAttribute="leading" id="8WV-un-zRQ"/>
                             <constraint firstItem="WAz-gY-3RR" firstAttribute="trailing" secondItem="0Mo-wi-lzU" secondAttribute="trailing" id="DtW-oB-pGT"/>
-                            <constraint firstItem="74n-Fc-uJW" firstAttribute="centerX" secondItem="cY3-8B-yOf" secondAttribute="centerX" id="FQh-l3-3jS"/>
                             <constraint firstItem="74n-Fc-uJW" firstAttribute="trailing" secondItem="0Mo-wi-lzU" secondAttribute="trailing" id="Gxs-B0-Oed"/>
                             <constraint firstItem="nmP-px-DTX" firstAttribute="top" secondItem="WAz-gY-3RR" secondAttribute="bottom" id="WN4-Fz-R3V"/>
                             <constraint firstItem="74n-Fc-uJW" firstAttribute="leading" secondItem="0Mo-wi-lzU" secondAttribute="leading" id="cXi-XA-BIl"/>
@@ -111,46 +110,77 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Focus Progress" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dCj-99-h5h">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Focus Progress" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dCj-99-h5h">
                                 <rect key="frame" x="0.0" y="44" width="414" height="44"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="Tha-pq-dGN"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Summarize by" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3FV-0p-gaK">
-                                <rect key="frame" x="0.0" y="96" width="414" height="44"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.83741801979999997" green="0.83743780850000005" blue="0.83742713930000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="4Vo-tL-e3F">
-                                <rect key="frame" x="277" y="103" width="117" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <segments>
-                                    <segment title="Month"/>
-                                    <segment title="Week"/>
-                                </segments>
-                                <connections>
-                                    <action selector="timeSegmentValueChanged:" destination="Vj9-H7-VUd" eventType="valueChanged" id="EsQ-VZ-DAS"/>
-                                </connections>
-                            </segmentedControl>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pxM-9O-Y7w">
-                                <rect key="frame" x="0.0" y="142" width="414" height="44"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pxM-9O-Y7w">
+                                <rect key="frame" x="0.0" y="132" width="414" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="fXh-8V-ScW"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Italic" family="Helvetica Neue" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="30a-41-RY6" customClass="BarChartView" customModule="Charts">
-                                <rect key="frame" x="0.0" y="194" width="414" height="619"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="30a-41-RY6" customClass="BarChartView" customModule="Charts">
+                                <rect key="frame" x="0.0" y="176" width="414" height="637"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qBU-nk-6zg">
+                                <rect key="frame" x="0.0" y="88" width="414" height="44"/>
+                                <subviews>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="4Vo-tL-e3F">
+                                        <rect key="frame" x="289" y="6.5" width="117" height="32"/>
+                                        <segments>
+                                            <segment title="Month"/>
+                                            <segment title="Week"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="timeSegmentValueChanged:" destination="Vj9-H7-VUd" eventType="valueChanged" id="EsQ-VZ-DAS"/>
+                                        </connections>
+                                    </segmentedControl>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Summarize by" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XtN-UH-nFS">
+                                        <rect key="frame" x="8" y="6" width="109" height="32"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.8980452418" green="0.89802831409999995" blue="0.89803975820000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="4Vo-tL-e3F" secondAttribute="trailing" constant="8" id="0mO-dq-LSt"/>
+                                    <constraint firstItem="XtN-UH-nFS" firstAttribute="leading" secondItem="qBU-nk-6zg" secondAttribute="leading" constant="8" id="3pi-WH-rGh"/>
+                                    <constraint firstItem="4Vo-tL-e3F" firstAttribute="top" secondItem="qBU-nk-6zg" secondAttribute="top" constant="6.5" id="6Z7-qZ-qIJ"/>
+                                    <constraint firstAttribute="bottom" secondItem="XtN-UH-nFS" secondAttribute="bottom" constant="6" id="70l-Ja-Tzf"/>
+                                    <constraint firstItem="XtN-UH-nFS" firstAttribute="top" secondItem="qBU-nk-6zg" secondAttribute="top" constant="6" id="a0I-lN-vhm"/>
+                                    <constraint firstAttribute="bottom" secondItem="4Vo-tL-e3F" secondAttribute="bottom" constant="6.5" id="ffr-cL-JwL"/>
+                                    <constraint firstItem="4Vo-tL-e3F" firstAttribute="leading" secondItem="XtN-UH-nFS" secondAttribute="trailing" constant="172" id="imS-jC-gEs"/>
+                                    <constraint firstAttribute="height" constant="44" id="zKd-ZC-fCg"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="pxM-9O-Y7w" firstAttribute="trailing" secondItem="S9c-4a-S36" secondAttribute="trailing" id="39R-60-6RD"/>
+                            <constraint firstItem="dCj-99-h5h" firstAttribute="top" secondItem="S9c-4a-S36" secondAttribute="top" id="Ah0-A3-Y18"/>
+                            <constraint firstItem="30a-41-RY6" firstAttribute="top" secondItem="pxM-9O-Y7w" secondAttribute="bottom" id="CQ6-F5-tIx"/>
+                            <constraint firstItem="qBU-nk-6zg" firstAttribute="top" secondItem="dCj-99-h5h" secondAttribute="bottom" id="FM2-nY-dsb"/>
+                            <constraint firstItem="pxM-9O-Y7w" firstAttribute="top" secondItem="qBU-nk-6zg" secondAttribute="bottom" id="Kao-O0-m5p"/>
+                            <constraint firstItem="30a-41-RY6" firstAttribute="bottom" secondItem="S9c-4a-S36" secondAttribute="bottom" id="Obb-u2-hwM"/>
+                            <constraint firstItem="dCj-99-h5h" firstAttribute="trailing" secondItem="S9c-4a-S36" secondAttribute="trailing" id="SbF-Bp-JjA"/>
+                            <constraint firstItem="dCj-99-h5h" firstAttribute="leading" secondItem="S9c-4a-S36" secondAttribute="leading" id="clZ-oZ-0X7"/>
+                            <constraint firstItem="pxM-9O-Y7w" firstAttribute="leading" secondItem="S9c-4a-S36" secondAttribute="leading" id="gs7-1G-TBk"/>
+                            <constraint firstItem="30a-41-RY6" firstAttribute="leading" secondItem="S9c-4a-S36" secondAttribute="leading" id="lEB-TR-DPL"/>
+                            <constraint firstItem="qBU-nk-6zg" firstAttribute="trailing" secondItem="S9c-4a-S36" secondAttribute="trailing" id="mfm-qR-1kf"/>
+                            <constraint firstItem="30a-41-RY6" firstAttribute="trailing" secondItem="S9c-4a-S36" secondAttribute="trailing" id="yok-q9-hGS"/>
+                            <constraint firstItem="qBU-nk-6zg" firstAttribute="leading" secondItem="S9c-4a-S36" secondAttribute="leading" id="zJj-MP-jzN"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="S9c-4a-S36"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Progress" image="chart.bar" catalog="system" selectedImage="chart.bar" id="I4H-L9-fwt"/>

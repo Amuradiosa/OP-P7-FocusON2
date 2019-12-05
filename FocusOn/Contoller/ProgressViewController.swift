@@ -27,7 +27,7 @@ class ProgressViewController: UIViewController {
     var completedGoals = [Double]()
     var totalGoals = [Double]()
     let months = ["Jan", "Feb", "Mar", "Apr", "May","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
-    let weeks = ["Week 1","Week 2","Week 3","Week 4"]
+    let weeks = ["Week 1","Week 2","Week 3","Week 4","Week 5"]
     
     func configure() {
         chartView.delegate = self as? ChartViewDelegate
@@ -101,7 +101,7 @@ class ProgressViewController: UIViewController {
     func setChartForWeeks() {
         var dataEntries1 = [BarChartDataEntry]()
         var dataEntries2 = [BarChartDataEntry]()
-        let xValuesForTotalGoals = [0.5,1.5,2.5,3.5]
+        let xValuesForTotalGoals = [0.5,1.5,2.5,3.5,4.5]
 
         totalGoals = data.weekly(goals: data.allGoalsObjects(achieved: false))
         completedGoals = data.weekly(goals: data.allGoalsObjects(achieved: true))

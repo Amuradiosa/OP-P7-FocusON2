@@ -11,6 +11,7 @@
 		15521CD3237C4F740031EA20 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15521CCC237C4E940031EA20 /* Charts.framework */; };
 		15521CD4237C4F740031EA20 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 15521CCC237C4E940031EA20 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		15521CE0237E97710031EA20 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15521CDF237E97710031EA20 /* DataController.swift */; };
+		15521D112393E95F0031EA20 /* DataControllerTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15521D102393E95F0031EA20 /* DataControllerTestCase.swift */; };
 		15706676235231D000DF3D02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15706675235231D000DF3D02 /* AppDelegate.swift */; };
 		15706678235231D000DF3D02 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15706677235231D000DF3D02 /* SceneDelegate.swift */; };
 		1570667D235231D000DF3D02 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1570667B235231D000DF3D02 /* Main.storyboard */; };
@@ -41,6 +42,13 @@
 			remoteGlobalIDString = 1CBBC58C6CE1EBEE9852CE41;
 			remoteInfo = ChartsTests;
 		};
+		15521D092393E88E0031EA20 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1570666A235231CF00DF3D02 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 15706671235231D000DF3D02;
+			remoteInfo = FocusOn;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -61,6 +69,9 @@
 		15521CC4237819970031EA20 /* HistoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTableViewCell.swift; sourceTree = "<group>"; };
 		15521CC6237C4E930031EA20 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = "Charts-master/Charts.xcodeproj"; sourceTree = "<group>"; };
 		15521CDF237E97710031EA20 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DataController.swift; path = FocusOn/Cells/DataController.swift; sourceTree = SOURCE_ROOT; };
+		15521D042393E88E0031EA20 /* FocusOnTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FocusOnTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		15521D082393E88E0031EA20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		15521D102393E95F0031EA20 /* DataControllerTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataControllerTestCase.swift; sourceTree = "<group>"; };
 		15706672235231D000DF3D02 /* FocusOn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FocusOn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		15706675235231D000DF3D02 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		15706677235231D000DF3D02 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -79,6 +90,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		15521D012393E88E0031EA20 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1570666F235231D000DF3D02 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -106,11 +124,21 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		15521D052393E88E0031EA20 /* FocusOnTests */ = {
+			isa = PBXGroup;
+			children = (
+				15521D082393E88E0031EA20 /* Info.plist */,
+				15521D102393E95F0031EA20 /* DataControllerTestCase.swift */,
+			);
+			path = FocusOnTests;
+			sourceTree = "<group>";
+		};
 		15706669235231CF00DF3D02 = {
 			isa = PBXGroup;
 			children = (
 				15521CC6237C4E930031EA20 /* Charts.xcodeproj */,
 				15706674235231D000DF3D02 /* FocusOn */,
+				15521D052393E88E0031EA20 /* FocusOnTests */,
 				15706673235231D000DF3D02 /* Products */,
 				15521CCF237C4EC60031EA20 /* Frameworks */,
 			);
@@ -120,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				15706672235231D000DF3D02 /* FocusOn.app */,
+				15521D042393E88E0031EA20 /* FocusOnTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -198,6 +227,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		15521D032393E88E0031EA20 /* FocusOnTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 15521D0F2393E88E0031EA20 /* Build configuration list for PBXNativeTarget "FocusOnTests" */;
+			buildPhases = (
+				15521D002393E88E0031EA20 /* Sources */,
+				15521D012393E88E0031EA20 /* Frameworks */,
+				15521D022393E88E0031EA20 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				15521D0A2393E88E0031EA20 /* PBXTargetDependency */,
+			);
+			name = FocusOnTests;
+			productName = FocusOnTests;
+			productReference = 15521D042393E88E0031EA20 /* FocusOnTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		15706671235231D000DF3D02 /* FocusOn */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 15706689235231D000DF3D02 /* Build configuration list for PBXNativeTarget "FocusOn" */;
@@ -226,6 +273,11 @@
 				LastUpgradeCheck = 1100;
 				ORGANIZATIONNAME = "Ahmad Murad";
 				TargetAttributes = {
+					15521D032393E88E0031EA20 = {
+						CreatedOnToolsVersion = 11.0;
+						LastSwiftMigration = 1100;
+						TestTargetID = 15706671235231D000DF3D02;
+					};
 					15706671235231D000DF3D02 = {
 						CreatedOnToolsVersion = 11.0;
 					};
@@ -251,6 +303,7 @@
 			projectRoot = "";
 			targets = (
 				15706671235231D000DF3D02 /* FocusOn */,
+				15521D032393E88E0031EA20 /* FocusOnTests */,
 			);
 		};
 /* End PBXProject section */
@@ -273,6 +326,13 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		15521D022393E88E0031EA20 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		15706670235231D000DF3D02 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -287,6 +347,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		15521D002393E88E0031EA20 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				15521D112393E95F0031EA20 /* DataControllerTestCase.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1570666E235231D000DF3D02 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -306,6 +374,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		15521D0A2393E88E0031EA20 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 15706671235231D000DF3D02 /* FocusOn */;
+			targetProxy = 15521D092393E88E0031EA20 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		1570667B235231D000DF3D02 /* Main.storyboard */ = {
@@ -327,6 +403,49 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		15521D0B2393E88E0031EA20 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = K8SYKS5XRJ;
+				INFOPLIST_FILE = FocusOnTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ahmadmurad.FocusOnTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FocusOn.app/FocusOn";
+			};
+			name = Debug;
+		};
+		15521D0C2393E88E0031EA20 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = K8SYKS5XRJ;
+				INFOPLIST_FILE = FocusOnTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ahmadmurad.FocusOnTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FocusOn.app/FocusOn";
+			};
+			name = Release;
+		};
 		15706687235231D000DF3D02 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -480,6 +599,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		15521D0F2393E88E0031EA20 /* Build configuration list for PBXNativeTarget "FocusOnTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				15521D0B2393E88E0031EA20 /* Debug */,
+				15521D0C2393E88E0031EA20 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		1570666D235231CF00DF3D02 /* Build configuration list for PBXProject "FocusOn" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

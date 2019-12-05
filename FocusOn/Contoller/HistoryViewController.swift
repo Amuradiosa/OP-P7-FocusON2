@@ -22,13 +22,13 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // MARK: - Variables
     
-    
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     private let context  = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     private var fetchedRC: NSFetchedResultsController<ToDo>!
     private let formatter = DateFormatter()
     let data = DataController()
     
+    // MARK: - Configuration
     
     func configure() {
         tableView.delegate = self
@@ -51,7 +51,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             // do the fetch request here for goals and tasks(using do catch block) and then store the data in the goals and tasks array to populate the tableview
         }
 
-        // MARK: - Table view data source
+    // MARK: - Table view data source
 
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -132,30 +132,9 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         return date
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+    
+    
 
 }
-
-//extension HistoryViewController: NSFetchedResultsControllerDelegate {
-//
-//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-//        switch type {
-//        case .insert:
-//            tableView.reloadData()
-//        case .update:
-//            tableView.reloadData()
-//        default:
-//            break
-//        }
-//    }
-//}
 
 

@@ -68,7 +68,6 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
         } else {
             displayAlertAnimation(title: "ah, no biggie, you’ll get it next time!", message: "")
         }
-        
     }
     
     func displayAlertAnimation(title: String, message: String) {
@@ -460,6 +459,7 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
     
     
     // MARK: - Notifications
+    
     func manageLocalNotifications() {
         var title: String?
         var body: String?

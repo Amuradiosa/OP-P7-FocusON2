@@ -257,7 +257,13 @@ extension TaskCustomStaticTableViewCell: UITextViewDelegate {
         } else {
         if checkmarkButton.isSelected == true {
             let alert = UIAlertController(title: "Great job on making progress! 👍🏻", message: nil, preferredStyle: UIAlertController.Style.alert)
-            UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+            let keyWindow = UIApplication.shared.connectedScenes
+            .filter({$0.activationState == .foregroundActive})
+            .map({$0 as? UIWindowScene})
+            .compactMap({$0})
+            .first?.windows
+            .filter({$0.isKeyWindow}).first
+            keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
             let when = DispatchTime.now() + 1
             DispatchQueue.main.asyncAfter(deadline: when){
               alert.dismiss(animated: true, completion: nil)
@@ -277,7 +283,13 @@ extension TaskCustomStaticTableViewCell: UITextViewDelegate {
                 let goal = self.fetchedRC.object(at: IndexPath(row: todaysGoalIndex, section: 0))
                 goal.completed = true
             }))
-            UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+            let keyWindow = UIApplication.shared.connectedScenes
+            .filter({$0.activationState == .foregroundActive})
+            .map({$0 as? UIWindowScene})
+            .compactMap({$0})
+            .first?.windows
+            .filter({$0.isKeyWindow}).first
+            keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
         }
     
     func isAllTasksCompleted() -> Bool {

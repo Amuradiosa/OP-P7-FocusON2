@@ -51,8 +51,8 @@ class DataController: NSManagedObject {
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         var weeklyGoals = [Double]()
         var numberOfgoalsInOneWeek: Double
-        let weeks = [08,15,22,30]
-                    for week in 0...3 {
+        let weeks = [02,09,15,22,27]
+                    for week in 0...4 {
                         numberOfgoalsInOneWeek = 0.0
                         for goal in 0..<goals.count {
                         if removeDayStamp(fromDate: goals[goal].cd!) == removeDayStamp(fromDate: Date()) {
@@ -67,14 +67,14 @@ class DataController: NSManagedObject {
         return weeklyGoals
     }
     
-    public func removeDayStamp(fromDate: Date) -> Date {
+    private func removeDayStamp(fromDate: Date) -> Date {
         guard let date = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: fromDate)) else {
             fatalError("Failed to strip day from Date object")
         }
         return date
     }
 
-    public func theWeekNumberOfMonth(fromDate: Date) -> Int {
+    private func theWeekNumberOfMonth(fromDate: Date) -> Int {
         let date = Calendar.current.dateComponents([.weekOfMonth], from: fromDate).weekOfMonth!
         return date
     }

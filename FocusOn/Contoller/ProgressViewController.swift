@@ -44,6 +44,8 @@ class ProgressViewController: UIViewController {
             xAxis.valueFormatter = IndexAxisValueFormatter(values:months)
             xAxis.granularity = 1
             xAxis.labelCount = 12
+            xAxis.centerAxisLabelsEnabled = false
+            
             
             let leftAxisFormatter = NumberFormatter()
             leftAxisFormatter.maximumFractionDigits = 1
@@ -90,6 +92,7 @@ class ProgressViewController: UIViewController {
         chartDataSet1.colors = [UIColor.black]
         chartDataSet1.valueTextColor = UIColor.white
         chartDataSet2.colors = [UIColor.gray]
+        chartDataSet2.valueTextColor = UIColor.white
         let chartData = BarChartData(dataSets: [chartDataSet1, chartDataSet2])
         let barWidth = 0.5
         chartData.barWidth = barWidth
@@ -114,6 +117,7 @@ class ProgressViewController: UIViewController {
         chartDataSet1.colors = [UIColor.black]
         chartDataSet1.valueTextColor = UIColor.white
         chartDataSet2.colors = [UIColor.gray]
+        chartDataSet2.valueTextColor = UIColor.white
         let chartData = BarChartData(dataSets: [chartDataSet1, chartDataSet2])
         let barWidth = 0.5
         chartData.barWidth = barWidth

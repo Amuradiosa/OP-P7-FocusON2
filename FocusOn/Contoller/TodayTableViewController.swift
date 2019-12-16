@@ -10,13 +10,8 @@ import UIKit
 import CoreData
 import UserNotifications
 
-//protocol todaysTasksDelegate {
-//    func weDontHaveA(task: ToDo?) -> Bool
-//}
-
 class TodayTableViewController: UITableViewController, UITextViewDelegate {
     
-   
     // MARK: - Variables
     
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -24,53 +19,31 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
     private var fetchedRC: NSFetchedResultsController<ToDo>!
     private let formatter = DateFormatter()
     private var selected: IndexPath!
+    // Global goal variable to hold the latest goal entered
     private var goal: ToDo!
-    let taskCell = TaskCustomStaticTableViewCell()
-//    var textChanged: ((String) -> Void)
-//
-//    func textChanged(action: @escaping (String) -> Void) {
-//        self.textChanged = action
-//    }
-//    let goalDayUserDefaultsKey = "goalKey"
-//    var savedGoalDayIndex: Int {
-//        get {
-//            let savedIndex = defaults.value(forKey: goalDayUserDefaultsKey)
-//            if savedIndex == nil {
-//                defaults.set(0, forKey: goalDayUserDefaultsKey)
-//            }
-//            return defaults.integer(forKey: goalDayUserDefaultsKey)
-//        }
-//        set {
-//            defaults.set(newValue, forKey: goalDayUserDefaultsKey)
-//        }
-//    }
-//    var delegate: todaysTasksDelegate?
+    private let taskCell = TaskCustomStaticTableViewCell()
         
     // MARK: - Goal Cell outlets
     
-    @IBOutlet weak var checkmarkButton: UIButton!
-    
-    
-    @IBOutlet weak var goalCaption: UITextView!
-    
-    @IBOutlet weak var goalCustomCell: UITableViewCell!
-    
-    
-    
+    @IBOutlet private weak var checkmarkButton: UIButton!
+    @IBOutlet private weak var goalCaption: UITextView!
+    @IBOutlet private weak var goalCustomCell: UITableViewCell!
     
     // MARK: - Goal Cell actions
-    @IBAction func checkButtonPressed(_ sender: Any) {
+    
+    @IBAction private func checkButtonPressed(_ sender: Any) {
         checkmarkButton.isSelected = !checkmarkButton.isSelected
-//        editingChanged(goalCaption)
+        // Calling the delegate method textViewDidChange to update the CoreData database with the change of checkmarkButton isSelected status
         textViewDidChange(goalCaption)
-        if checkmarkButton.isSelected == true {
-            displayAlertAnimation(title: "Well Done 🥳", message: "Congrats on achieving your goal!")
-        } else {
+        checkmarkButton.isSelected ?
+            displayAlertAnimation(title: "Well Done 🥳", message: "Congrats on achieving your goal!") :
             displayAlertAnimation(title: "ah, no biggie, you’ll get it next time!", message: "")
-        }
+        // to update the notification captions
+        manageLocalNotifications()
     }
     
-    func displayAlertAnimation(title: String, message: String) {
+    // to promote the user with an animatin when marking a task or a goal as ‘completed’ or to ‘undo’ an action
+    private func displayAlertAnimation(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
         self.present(alert, animated: true)
         let when = DispatchTime.now() + 1
@@ -80,31 +53,13 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
         }
     }
     
-    func displayAlertAction() {
+    // alert action when app first launch in the day to give user the option to re-list the last uncompleted goal as today's goal
+    private func displayAlertAction() {
         let alert = UIAlertController(title: "Your goal has not been achived yet!", message: "Would you like to re-list it as today's goal?", preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "No", style: .default, handler: { (action) in
-            self.goalCaption.text = ""
-            let goal = ToDo(entity: ToDo.entity(), insertInto: self.context)
-            goal.caption = ""
-            goal.kind = false
-            goal.cd = self.removeTimeStamp(fromDate: Date())
-            goal.completed = false
-            self.appDelegate.saveContext()
-            self.goal = goal
-            for _ in 0...2 {
-                let newTask = ToDo(entity: ToDo.entity(), insertInto: self.context)
-                newTask.caption = ""
-                newTask.completed = false
-                newTask.cd = self.removeTimeStamp(fromDate: Date())
-                newTask.kind = true
-                self.appDelegate.saveContext()
-                self.refresh()
-            }
-            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1), IndexPath(row: 1, section: 1), IndexPath(row: 2, section: 1)], with: .automatic)
-//            self.tableView.reloadData()
-            // see tommorow if you need this one or not
-//            self.taskCell.textViewDidChange(self.taskCell.taskCaption)
+            self.clearOldGoalsAndTasks()
         }))
+        // re-list last uncompleted goal and its tasks(by basically changing the creation date)
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action) in
             let goal = self.fetchedRC?.object(at: IndexPath(row: self.dayIndexPathRow(forSection: 0), section: 0))
             goal?.cd = self.removeTimeStamp(fromDate: Date())
@@ -119,7 +74,29 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
         self.present(alert, animated: true)
     }
     
-    public func removeTimeStamp(fromDate: Date) -> Date {
+    private func clearOldGoalsAndTasks() {
+        self.goalCaption.text = ""
+        let goal = ToDo(entity: ToDo.entity(), insertInto: self.context)
+        goal.caption = ""
+        goal.kind = false
+        goal.cd = self.removeTimeStamp(fromDate: Date())
+        goal.completed = false
+        checkmarkButton.isSelected = !checkmarkButton.isSelected
+        self.appDelegate.saveContext()
+        self.goal = goal
+        for _ in 0...2 {
+            let newTask = ToDo(entity: ToDo.entity(), insertInto: self.context)
+            newTask.caption = ""
+            newTask.completed = false
+            newTask.cd = self.removeTimeStamp(fromDate: Date())
+            newTask.kind = true
+            self.appDelegate.saveContext()
+            self.refresh()
+        }
+        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1), IndexPath(row: 1, section: 1), IndexPath(row: 2, section: 1)], with: .automatic)
+    }
+    
+    private func removeTimeStamp(fromDate: Date) -> Date {
         guard let date = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month, .day], from: fromDate)) else {
             fatalError("Failed to strip time from Date object")
         }
@@ -127,6 +104,7 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
+        // begin and end updates of the tableview to make sure cells are expanding simultanesously with the caption text inside the textView
         tableView.beginUpdates()
         tableView.endUpdates()
         if WeDontHaveA(goal: goal) {
@@ -143,30 +121,12 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
             appDelegate.saveContext()
         }
     }
-//    @IBAction func editingChanged(_ sender: UITextField) {
-//        if WeDontHaveA(goal: goal) {
-//            let goal = ToDo(entity: ToDo.entity(), insertInto: context)
-//            goal.caption = sender.text!
-//            goal.completed = checkmarkButton.isSelected
-//            goal.cd = Date()
-//            goal.kind = false
-//            appDelegate.saveContext()
-//            self.goal = goal
-//        } else {
-//            goal.caption = sender.text!
-//            goal.completed = checkmarkButton.isSelected
-//            appDelegate.saveContext()
-//        }
-//    }
-    
-    
-    
-    func WeDontHaveA(goal: ToDo?) -> Bool {
+    // checking if we do a have a goal today by comparing the creation date day of the last goal stored in the database with today's date
+    private func WeDontHaveA(goal: ToDo?) -> Bool {
         if let todaysGoal = goal {
             let dayOfCreation = formatter.calendar.component(.day, from: todaysGoal.cd!)
             let todaysDay = formatter.calendar.component(.day, from: Date())
             if dayOfCreation != todaysDay {
-//                savedGoalDayIndex += 1
                 return true
             } else {
                 return false
@@ -181,25 +141,20 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-        
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableView.automaticDimension
-//        tableView.reloadData()
-        // do the fetch request here for goals and tasks(using do catch block) and then store the data in the goals and tasks array to populate the tableview
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         if WeDontHaveA(goal: goal) {
             if goal.completed == false {
                 displayAlertAction()
+            } else {
+                clearOldGoalsAndTasks()
             }
         }
         manageLocalNotifications()
@@ -223,6 +178,7 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
         //print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
     }
+    // tapGesture to hide keyboard when tapped anywhere on the tabelview
     private func configureTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: Selector(("hideKeyboard")))
         tapGesture.cancelsTouchesInView = true
@@ -240,12 +196,14 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
             goalCaption.textColor = UIColor.lightGray
         }
     }
+    
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.lightGray {
             textView.text = nil
             textView.textColor = UIColor.black
         }
     }
+    
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
             textView.text = "Set your goal..."
@@ -255,60 +213,20 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
         textView.resignFirstResponder()
     }
-//    @objc func tapEdit(_ recognizer: UITapGestureRecognizer)  {
-//        if recognizer.state == .ended {
-//            let tapLocation = recognizer.location(in: self.tableView)
-//            if let tapIndexPath = self.tableView.indexPathForRow(at: tapLocation) {
-//                if let tappedCell = self.tableView.cellForRow(at: tapIndexPath) as? TaskCustomStaticTableViewCell {
-//                    let task = fetchedRC.object(at: tapIndexPath)
-//                    task.caption = tappedCell.taskCaption.text
-//                    task.completed = tappedCell.checkmarkButton.isSelected
-//                    //do what you want to cell here
-//
-//                }
-//            }
-//        }
-//    }
+
     private func registerCell() {
         let cell = UINib(nibName: "TaskCustomStaticTableViewCell", bundle: nil)
         tableView.register(cell, forCellReuseIdentifier: "customCell")
     }
     
-    
-
     // MARK: - Table view data source
     
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        selected = indexPath
-//        print("this is the selected cell \(String(describing: selected))")
-//    }
-
-    
-//    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        /*guard let sections = fetchedRC.sections, let objs = sections[section].objects else {
-//            return 0
-//        }
-//        return objs.count*/
-//        switch section {
-//        case 0:
-//            return 1
-//        case 1:
-//            return 3
-//        default:
-//            return 0
-//        }
-//    }
-//
-    func dayIndexPathRow(forSection: Int) -> Int {
-//        if  (fetchedRC.sections?[forSection].numberOfObjects)! == 1 || (fetchedRC.sections?[forSection].numberOfObjects)! == 2 || (fetchedRC.sections?[forSection].numberOfObjects)! == 3 {
-//            return 0
-//        } else {
+    private func dayIndexPathRow(forSection: Int) -> Int {
         if forSection == 0 {
-            return (fetchedRC.sections?[forSection].numberOfObjects)! - 1
+            return (fetchedRC.sections?[forSection].numberOfObjects)! - 1 // cuz index starts from 0 and we have only one goal every day
         } else {
-            return (fetchedRC.sections?[forSection].numberOfObjects)! - 3
+            return (fetchedRC.sections?[forSection].numberOfObjects)! - 3 // cuz index starts from 0 and we have three tasks every day
         }
-//        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -331,8 +249,11 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as? TaskCustomStaticTableViewCell else {
                     return UITableViewCell()
                 }
+                // make UITableViewCell to follow the height of the UITextView
                 cell.textChanged { [weak tableView] (newText: String) in
+                    // make updating the tableview happens in the main thread to avoid a weird scrolling behavior caused by the conflict between the focusing of the cursor and the layout of the tableView
                     DispatchQueue.main.async {
+                        // tell tableView just to re-layout itself
                         tableView?.beginUpdates()
                         tableView?.endUpdates()
                     }
@@ -358,81 +279,8 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
         }
     }
     
-    
-    
-//    
-//    override func numberOfSections(in tableView: UITableView) -> Int {
-//        //return fetchedRC.sections?.count ?? 0
-//        return 2
-//    }
+    // MARK: - Secondary helper functions:
 
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
-    //MARK: - Actions
-    
-//    @IBAction func handleTap(gestureRcognizer: UIGestureRecognizer) {
-//        let point = gestureRcognizer.location(in: tableView)
-//        if let indexPath = tableView.indexPathForRow(at: point) {
-//            selected = indexPath
-//        }
-//    }
-    
-    
-    // MARK: - Main private functions
-    
     private func refresh() {
         let request = ToDo.fetchRequest() as NSFetchRequest<ToDo>
         let sort    = NSSortDescriptor(key: #keyPath(ToDo.kind), ascending: true)
@@ -446,7 +294,7 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
         }
     }
     
-    func validateIndexPath(_ indexPath: IndexPath,fetchedRC: NSFetchedResultsController<NSFetchRequestResult>) -> Bool {
+    private func validateIndexPath(_ indexPath: IndexPath,fetchedRC: NSFetchedResultsController<NSFetchRequestResult>) -> Bool {
         if let sections = fetchedRC.sections,
         indexPath.section < sections.count {
            if indexPath.row < sections[indexPath.section].numberOfObjects {
@@ -455,12 +303,10 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
         }
         return false
     }
-    // MARK: - Secondary helper functions:
-    
     
     // MARK: - Notifications
     
-    func manageLocalNotifications() {
+    private func manageLocalNotifications() {
         var title: String?
         var body: String?
         if WeDontHaveA(goal: goal) {
@@ -473,7 +319,7 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
         scheduleLocalNotification(title: title, body: body)
     }
     
-    func scheduleLocalNotification(title: String?, body: String?) {
+    private func scheduleLocalNotification(title: String?, body: String?) {
         let identifier = "goalsListSummary"
         let notificationCenter = UNUserNotificationCenter.current()
         // remove previously scheduled notifications
@@ -496,11 +342,7 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
 
 }
 
-
-
-
 // Fetched Results Controller delegate:
-
 extension TodayTableViewController: NSFetchedResultsControllerDelegate {
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
@@ -511,6 +353,4 @@ extension TodayTableViewController: NSFetchedResultsControllerDelegate {
             break
         }
     }
-    
-
 }

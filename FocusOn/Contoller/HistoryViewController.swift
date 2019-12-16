@@ -66,7 +66,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "toDoCell") as? HistoryTableViewCell else {
             return UITableViewCell()
         }
-        if let toDo = fetchedRC?.object(at: indexPath) {
+        if let toDo = fetchedRC?.object(at: reversedIndex(indexPath)) {
             if toDo.kind == false {
                 cell.toDoCellLabel.font = cell.toDoCellLabel.font.withSize(28)
             } else {
@@ -84,13 +84,20 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-        
+    private func reversedIndex(_ indexPath: IndexPath) -> IndexPath {
+        return IndexPath(row: indexPath.row, section: fetchedRC.sections!.count - 1 - indexPath.section)
+    }
+    
+    private func reversedSectionIndex(_ indexPathSection: Int) -> Int {
+        return fetchedRC.sections!.count - 1 - indexPathSection
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return fetchedRC.sections?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if let toDoObjects = fetchedRC.sections?[section].objects as? [ToDo], let firstToDo = toDoObjects.first {
+        if let toDoObjects = fetchedRC.sections?[reversedSectionIndex(section)].objects as? [ToDo], let firstToDo = toDoObjects.first {
             let date = formatter.string(from: firstToDo.cd!)
             return date
         }
@@ -132,9 +139,6 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         return date
     }
     
-    
-    
-
 }
 
 

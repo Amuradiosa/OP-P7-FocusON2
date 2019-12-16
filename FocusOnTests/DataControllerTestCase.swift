@@ -24,7 +24,6 @@ class DataControllerTestCase: XCTestCase {
     }
     
     func testGivenDataController_WhenFetchingAllGoalsObjectsMethod_ThenAllFetchedGoalsEqualsAllFetchedObjects() {
-        
         let fetchedGoals = dataController.allGoalsObjects(achieved: false)
         XCTAssertNotNil(fetchedGoals, "unable to fetch data")
         let fetchedObjects = fetchedRC.sections?[0].objects

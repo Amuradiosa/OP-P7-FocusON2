@@ -136,17 +136,9 @@ class ProgressViewController: UIViewController {
         super.viewDidLoad()
         configure()
         configureDate()
-        print(data.monthly(goals: data.allGoalsObjects(achieved: true)))
-            
-        print(data.monthly(goals: data.allGoalsObjects(achieved: false)))
-            
-            
-        print(data.weekly(goals: data.allGoalsObjects(achieved: true)))
-            
-        print(data.weekly(goals: data.allGoalsObjects(achieved: false)))
-
-
-
+//        print(data.monthly(goals: data.allGoalsObjects(achieved: true)))
+//        print(data.monthly(goals: data.allGoalsObjects(achieved: false)))
+//        print(data.weekly(goals: data.allGoalsObjects(achieved: true)))
+//        print(data.weekly(goals: data.allGoalsObjects(achieved: false)))
     }
-    
 }

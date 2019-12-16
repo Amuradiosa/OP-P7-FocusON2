@@ -163,7 +163,6 @@
 				1570668D2352321600DF3D02 /* View */,
 				1570669F2358F7F800DF3D02 /* Supporting files */,
 				15706686235231D000DF3D02 /* Info.plist */,
-				15706675235231D000DF3D02 /* AppDelegate.swift */,
 			);
 			path = FocusOn;
 			sourceTree = "<group>";
@@ -211,6 +210,7 @@
 				15706683235231D000DF3D02 /* LaunchScreen.storyboard */,
 				1570667E235231D000DF3D02 /* FocusOn.xcdatamodeld */,
 				15706677235231D000DF3D02 /* SceneDelegate.swift */,
+				15706675235231D000DF3D02 /* AppDelegate.swift */,
 			);
 			name = "Supporting files";
 			sourceTree = "<group>";

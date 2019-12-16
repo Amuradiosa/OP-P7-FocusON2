@@ -11,6 +11,4 @@ import UIKit
 
 class HistoryTableViewCell: UITableViewCell {
     @IBOutlet weak var toDoCellLabel: UILabel!
-    
-    
 }

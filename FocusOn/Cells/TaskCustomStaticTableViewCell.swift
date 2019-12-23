@@ -33,7 +33,6 @@ class TaskCustomStaticTableViewCell: UITableViewCell {
 extension TaskCustomStaticTableViewCell: UITextViewDelegate {
     
     // MARK: - Actions
-
     private func removeTimeStamp(fromDate: Date) -> Date {
         guard let date = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month, .day], from: fromDate)) else {
             fatalError("Failed to strip time from Date object")
@@ -164,7 +163,7 @@ extension TaskCustomStaticTableViewCell: UITextViewDelegate {
         configureTextview()
     }
     
-    private func configureTextview() {
+    func configureTextview() {
         taskCaption.delegate = self
         if taskCaption.text.isEmpty {
             taskCaption.text = "Set your task..."

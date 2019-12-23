@@ -19,9 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.badge,.sound]) { (granted, error) in
             if (granted) {
-                print("We'll be able to set reminderes")
+//                print("We'll be able to set reminderes")
             } else {
-                print("We need to prove the app is amazing so the user will change their mind")
+//                print("We need to prove the app is amazing so the user will change their mind")
             }
         }
         return true

@@ -75,23 +75,23 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
     }
     
     private func clearOldGoalsAndTasks() {
-        self.goalCaption.text = ""
+        goalCaption.text = ""
         let goal = ToDo(entity: ToDo.entity(), insertInto: self.context)
         goal.caption = ""
         goal.kind = false
         goal.cd = self.removeTimeStamp(fromDate: Date())
         goal.completed = false
-        checkmarkButton.isSelected = !checkmarkButton.isSelected
-        self.appDelegate.saveContext()
+//        checkmarkButton.isSelected = !checkmarkButton.isSelected
+        appDelegate.saveContext()
         self.goal = goal
         for _ in 0...2 {
-            let newTask = ToDo(entity: ToDo.entity(), insertInto: self.context)
+            let newTask = ToDo(entity: ToDo.entity(), insertInto: context)
             newTask.caption = ""
             newTask.completed = false
             newTask.cd = self.removeTimeStamp(fromDate: Date())
             newTask.kind = true
-            self.appDelegate.saveContext()
-            self.refresh()
+            appDelegate.saveContext()
+            refresh()
         }
         self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1), IndexPath(row: 1, section: 1), IndexPath(row: 2, section: 1)], with: .automatic)
     }
@@ -155,6 +155,8 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
                 displayAlertAction()
             } else {
                 clearOldGoalsAndTasks()
+                checkmarkButton.isSelected = !checkmarkButton.isSelected
+                configureTextview()
             }
         }
         manageLocalNotifications()
@@ -265,8 +267,6 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
                     if let task = fetchedRC?.object(at: IndexPath(row: indexPath.row + dayIndexPathRow(forSection: indexPath.section), section: indexPath.section)) {
                         cell.taskCaption.text = task.caption
                         cell.checkmarkButton.isSelected = task.completed
-//                        TaskCustomStaticTableViewCell.currentIndexPath = indexPath.row
-//                        delegate?.weDontHaveA(task: task)
                         return cell
                     } else {
                         return cell

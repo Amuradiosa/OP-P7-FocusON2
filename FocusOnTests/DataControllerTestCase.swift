@@ -27,14 +27,14 @@ class DataControllerTestCase: XCTestCase {
         let fetchedGoals = dataController.allGoalsObjects(achieved: false)
         XCTAssertNotNil(fetchedGoals, "unable to fetch data")
         let fetchedObjects = fetchedRC.sections?[0].objects
-        XCTAssert(fetchedGoals.count == fetchedObjects?.count, "fetchedGoals count isn't equal to fetchedObjects")
+        XCTAssert(fetchedGoals?.count == fetchedObjects?.count, "fetchedGoals count isn't equal to fetchedObjects")
     }
     
     func testGivenDataController_WhenMonthlyGivenAllObjectsMethodArryaAndFetchedRCObjectsArray_ThenReturnedArrayElementsAreOfTheSame() {
         
         let allGoals = fetchedRC.sections?[0].objects as? [ToDo]
         let monthlyFetchedArrayFromAllGoals = dataController.monthly(goals: allGoals!)
-        let monthlyFetchedArray = dataController.monthly(goals: dataController.allGoalsObjects(achieved: false))
+        let monthlyFetchedArray = dataController.monthly(goals: dataController.allGoalsObjects(achieved: false)!)
         XCTAssertTrue(monthlyFetchedArrayFromAllGoals == monthlyFetchedArray, "Monthly arrays aren't equal")
     }
     
@@ -42,7 +42,7 @@ class DataControllerTestCase: XCTestCase {
         
         let allGoals = fetchedRC.sections?[0].objects as? [ToDo]
         let weeklyFetchedArrayFromAllGoals = dataController.weekly(goals: allGoals!)
-        let weeklyFetchedArray = dataController.weekly(goals: dataController.allGoalsObjects(achieved: false))
+        let weeklyFetchedArray = dataController.weekly(goals: dataController.allGoalsObjects(achieved: false)!)
         XCTAssertTrue(weeklyFetchedArrayFromAllGoals == weeklyFetchedArray, "Weekly arrays aren't equal")
     }
     

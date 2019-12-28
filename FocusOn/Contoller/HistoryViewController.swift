@@ -13,47 +13,42 @@ import CoreData
 class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var currentMonth: UILabel!
-    
     @IBOutlet weak var totalNumberOfAchievedGoals: UILabel!
-    
-    
-    
     @IBOutlet weak var tableView: UITableView!
     
     // MARK: - Variables
     
-    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    private let context  = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    private var fetchedRC: NSFetchedResultsController<ToDo>!
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    let context  = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var fetchedRC: NSFetchedResultsController<ToDo>!
     private let formatter = DateFormatter()
     let data = DataController()
     
     // MARK: - Configuration
     
-    func configure() {
+    private func configure() {
         tableView.delegate = self
         tableView.dataSource = self
         refresh()
         formatter.dateStyle = .long
         formatter.timeStyle = .none
         currentMonth.text = formatter.string(from: removeTimeStamp(fromDate: Date()))
-        totalNumberOfAchievedGoals.text = "\(data.allGoalsObjects(achieved: true).count) out of \(data.allGoalsObjects(achieved: false).count) goals completed"
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
-        // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
+        refresh()
         tableView.reloadData()
-            // do the fetch request here for goals and tasks(using do catch block) and then store the data in the goals and tasks array to populate the tableview
+        totalNumberOfAchievedGoals.text = "\(data.allGoalsObjects(achieved: true)?.count ?? 0) out of \(data.allGoalsObjects(achieved: false)?.count ?? 0) goals completed"
         }
 
     // MARK: - Table view data source
 
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let sections = fetchedRC.sections, let objs = sections[section].objects else {
             return 0
@@ -61,7 +56,6 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         return objs.count
     }
         
-
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "toDoCell") as? HistoryTableViewCell else {
             return UITableViewCell()
@@ -72,11 +66,18 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             } else {
                 cell.toDoCellLabel.font = cell.toDoCellLabel.font.withSize(20)
             }
-            cell.toDoCellLabel.text = toDo.caption
-            if toDo.completed {
-                cell.accessoryType = .checkmark
+            if toDo.caption != "" {
+                cell.toDoCellLabel.textColor = UIColor.black
+                cell.toDoCellLabel.text = toDo.caption
+                if toDo.completed {
+                    cell.accessoryType = .checkmark
+                } else {
+                    cell.accessoryType = .none
+                }
             } else {
+                cell.toDoCellLabel.textColor = UIColor.lightGray
                 cell.accessoryType = .none
+                cell.toDoCellLabel.text = toDo.kind ? "This task hasn't been set yet..." : "This goal hasn't been set yet..."
             }
             return cell
         } else {
@@ -103,6 +104,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
         return "it didn't work"
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 {
             return 60
@@ -110,14 +112,10 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             return 40
         }
     }
-    
-    
     // MARK: - Main private functions
     
     private func refresh() {
         let request = ToDo.fetchRequest() as NSFetchRequest<ToDo>
-        // FIXME: - if needed, specify the sortdescriptor
-        //let sort    = NSSortDescriptor()
         let sort    = NSSortDescriptor(key: #keyPath(ToDo.kind), ascending: true)
         let date = NSSortDescriptor(key: #keyPath(ToDo.cd), ascending: true)
         request.sortDescriptors = [date, sort]
@@ -127,18 +125,16 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
-        
     }
     
     // MARK: - Secondary helper functions:
     
-    public func removeTimeStamp(fromDate: Date) -> Date {
+    private func removeTimeStamp(fromDate: Date) -> Date {
         guard let date = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: fromDate)) else {
             fatalError("Failed to strip time from Date object")
         }
         return date
     }
-    
 }
 
 

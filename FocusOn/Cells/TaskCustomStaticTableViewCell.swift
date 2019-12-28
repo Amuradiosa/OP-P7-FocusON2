@@ -22,6 +22,7 @@ class TaskCustomStaticTableViewCell: UITableViewCell {
     // create a callback from the cell to inform us on any text changes just so that Cell can follow the height of the UITextView.
     private var textChanged: ((String) -> Void)?
 
+
     // MARK: - Outlets
     
     @IBOutlet weak var taskNumber: UIImageView!
@@ -31,6 +32,7 @@ class TaskCustomStaticTableViewCell: UITableViewCell {
 }
 
 extension TaskCustomStaticTableViewCell: UITextViewDelegate {
+    
     
     // MARK: - Actions
     private func removeTimeStamp(fromDate: Date) -> Date {
@@ -43,27 +45,56 @@ extension TaskCustomStaticTableViewCell: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         // create a callback from the cell to inform us on any text changes so UITableViewCell can follow the height of the UITextView.
         textChanged?(textView.text)
-        if isItNotTheSameDay(forThisTask: textView.tag) {
-            let newTask = ToDo(entity: ToDo.entity(), insertInto: context)
-            newTask.caption = textView.text!
-            newTask.completed = checkmarkButton.isSelected
-            newTask.cd = removeTimeStamp(fromDate: Date())
-            newTask.kind = true
-            appDelegate.saveContext()
-            textView.tag += 3
+        refresh()
+        if weDontHaveAGoal(localFetchedRC: fetchedRC as! NSFetchedResultsController<NSFetchRequestResult>) {
+            textView.text = "Set your goal first"
+            textView.textColor = UIColor.red
         } else {
-            let task = fetchedRC.object(at: IndexPath(row: textView.tag, section: 1))
-            task.caption = textView.text!
-            task.completed = checkmarkButton.isSelected
-            appDelegate.saveContext()
+            textView.textColor = UIColor.black
+            if isItNotTheSameDay(forThisTask: textView.tag) {
+                textView.text = ""
+                let newTask = ToDo(entity: ToDo.entity(), insertInto: context)
+                newTask.caption = textView.text!
+                newTask.completed = checkmarkButton.isSelected
+                newTask.cd = removeTimeStamp(fromDate: Date())
+                newTask.kind = true
+                appDelegate.saveContext()
+                if shallIncrementTextViewTag(forThisTag: textView.tag) {
+                    textView.tag += 3
+                }
+            } else {
+                let task = fetchedRC.object(at: IndexPath(row: textView.tag, section: 1))
+                task.caption = textView.text!
+                task.completed = checkmarkButton.isSelected
+                appDelegate.saveContext()
+            }
         }
     }
+    
+    private func shallIncrementTextViewTag(forThisTag: Int) -> Bool {
+        if     forThisTag != 0
+            || forThisTag != 1
+            || forThisTag != 2 {
+            return false
+        } else {
+            return true
+        }
+    }
+    
+    // this func is merely to prevent app from crashing when there's no data in database when app first launched by a user
+    private func weDontHaveAGoal(localFetchedRC: NSFetchedResultsController<NSFetchRequestResult>) -> Bool {
+            if localFetchedRC.sections?.count == 0 {
+                    return true
+            }
+        return false
+    }
+    
     // create a callback from the cell to inform us on any text changes so UITableViewCell can follow the height of the UITextView.
     func textChanged(action: @escaping (String) -> Void) {
         self.textChanged = action
     }
     
-    // check if last created task is created today of in past days
+    // check if last created task is created today or in past days
     func isItNotTheSameDay(forThisTask: Int) -> Bool {
         refresh()
         // this condition is when the app is opened for the first time
@@ -133,6 +164,7 @@ extension TaskCustomStaticTableViewCell: UITextViewDelegate {
     
     // this func to check if all tasks are completed so we can promote user with an option to mark goal completed
     func isAllTasksCompleted() -> Bool {
+        refresh()
         let todaysFirstTaskIndex = (fetchedRC.sections?[1].numberOfObjects)! - 3
         let todaysLastTaskIndex = (fetchedRC.sections?[1].numberOfObjects)! - 1
         let todaysTasksCount = todaysLastTaskIndex - todaysFirstTaskIndex + 1
@@ -159,9 +191,10 @@ extension TaskCustomStaticTableViewCell: UITextViewDelegate {
     private func configure() {
         taskCaption.delegate = self
         formatter.dateFormat = "dd MM yyyy"
-        refresh()
         configureTextview()
+        refresh()
     }
+    
     
     func configureTextview() {
         taskCaption.delegate = self

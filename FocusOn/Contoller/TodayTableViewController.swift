@@ -18,7 +18,6 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
     private let context  = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     private var fetchedRC: NSFetchedResultsController<ToDo>!
     private let formatter = DateFormatter()
-    private var selected: IndexPath!
     // Global goal variable to hold the latest goal entered
     private var goal: ToDo!
     private let taskCell = TaskCustomStaticTableViewCell()
@@ -26,7 +25,7 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
     // MARK: - Goal Cell outlets
     
     @IBOutlet private weak var checkmarkButton: UIButton!
-    @IBOutlet private weak var goalCaption: UITextView!
+    @IBOutlet private(set) weak var goalCaption: UITextView!
     @IBOutlet private weak var goalCustomCell: UITableViewCell!
     
     // MARK: - Goal Cell actions
@@ -81,7 +80,6 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
         goal.kind = false
         goal.cd = self.removeTimeStamp(fromDate: Date())
         goal.completed = false
-//        checkmarkButton.isSelected = !checkmarkButton.isSelected
         appDelegate.saveContext()
         self.goal = goal
         for _ in 0...2 {
@@ -122,7 +120,7 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
         }
     }
     // checking if we do a have a goal today by comparing the creation date day of the last goal stored in the database with today's date
-    private func WeDontHaveA(goal: ToDo?) -> Bool {
+    func WeDontHaveA(goal: ToDo?) -> Bool {
         if let todaysGoal = goal {
             let dayOfCreation = formatter.calendar.component(.day, from: todaysGoal.cd!)
             let todaysDay = formatter.calendar.component(.day, from: Date())
@@ -151,14 +149,17 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         if WeDontHaveA(goal: goal) {
-            if goal.completed == false {
-                displayAlertAction()
-            } else {
-                clearOldGoalsAndTasks()
-                checkmarkButton.isSelected = !checkmarkButton.isSelected
-                configureTextview()
+            if isThereGoalToFetch(localFetchedRC: fetchedRC as! NSFetchedResultsController<NSFetchRequestResult>) {
+                if goal.completed == false {
+                    displayAlertAction()
+                } else {
+                    clearOldGoalsAndTasks()
+                    checkmarkButton.isSelected = !checkmarkButton.isSelected
+                    configureTextview()
+                }
             }
         }
+        configureTextview()
         manageLocalNotifications()
     }
     
@@ -172,14 +173,9 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
         formatter.timeStyle = .none
         formatter.dateStyle = .short
         refresh()
-        configureTextview()
         configureTapGesture()
-//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapEdit(_:)))
-//        tableView.addGestureRecognizer(tapGesture)
-//        tapGesture.delegate = self
-        //print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
-        
     }
+    
     // tapGesture to hide keyboard when tapped anywhere on the tabelview
     private func configureTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: Selector(("hideKeyboard")))
@@ -224,11 +220,19 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
     // MARK: - Table view data source
     
     private func dayIndexPathRow(forSection: Int) -> Int {
-        if forSection == 0 {
-            return (fetchedRC.sections?[forSection].numberOfObjects)! - 1 // cuz index starts from 0 and we have only one goal every day
-        } else {
-            return (fetchedRC.sections?[forSection].numberOfObjects)! - 3 // cuz index starts from 0 and we have three tasks every day
-        }
+            switch forSection {
+            case 0:
+                if isThereGoalToFetch(localFetchedRC: fetchedRC as! NSFetchedResultsController<NSFetchRequestResult>) {
+                    return (fetchedRC.sections?[forSection].numberOfObjects)! - 1 // cuz index startsfrom 0 and we have only one goal every day
+                }
+            case 1:
+                if isThereTaskToFetch(localFetchedRC: fetchedRC as! NSFetchedResultsController<NSFetchRequestResult>) {
+                    return (fetchedRC.sections?[forSection].numberOfObjects)! - 3 // cuz index starts from 0 and we have three tasks every day
+                }
+            default:
+            return 0
+            }
+        return 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -265,7 +269,13 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
                 cell.checkmarkButton.tag = indexPath.row + dayIndexPathRow(forSection: indexPath.section)
                 if validateIndexPath(IndexPath(row: indexPath.row + dayIndexPathRow(forSection: indexPath.section), section: indexPath.section), fetchedRC: fetchedRC as! NSFetchedResultsController<NSFetchRequestResult>) {
                     if let task = fetchedRC?.object(at: IndexPath(row: indexPath.row + dayIndexPathRow(forSection: indexPath.section), section: indexPath.section)) {
-                        cell.taskCaption.text = task.caption
+                        if task.caption == "" || cell.taskCaption.text == "" {
+                            cell.taskCaption.textColor = UIColor.lightGray
+                            cell.taskCaption.text = "Set your task"
+                        } else {
+                            cell.taskCaption.textColor = UIColor.black
+                            cell.taskCaption.text = task.caption
+                        }
                         cell.checkmarkButton.isSelected = task.completed
                         return cell
                     } else {
@@ -300,6 +310,27 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
            if indexPath.row < sections[indexPath.section].numberOfObjects {
               return true
            }
+        }
+        return false
+    }
+    
+    // making sure that there's a goal to fetch
+    private func isThereGoalToFetch(localFetchedRC: NSFetchedResultsController<NSFetchRequestResult>) -> Bool {
+            if localFetchedRC.sections?.count != 0 {
+                    return true
+            }
+        return false
+    }
+    // making sure that there's a task to fetch
+    private func isThereTaskToFetch(localFetchedRC: NSFetchedResultsController<NSFetchRequestResult>) -> Bool {
+        if isThereGoalToFetch(localFetchedRC: fetchedRC as! NSFetchedResultsController<NSFetchRequestResult>) {
+            if localFetchedRC.sections?.count != 1 {
+                    return true
+            }
+        } else {
+            if localFetchedRC.sections?.count != 0 {
+                    return true
+            }
         }
         return false
     }
@@ -339,7 +370,6 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
         }
         
     }
-
 }
 
 // Fetched Results Controller delegate:

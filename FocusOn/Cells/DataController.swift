@@ -10,20 +10,30 @@ import Foundation
 import UIKit
 import CoreData
 
-class DataController: NSManagedObject {
+class DataController {
     
-    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    private let context  = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    private var fetchedRC: NSFetchedResultsController<ToDo>!
-    private let formatter = DateFormatter()
-
-    func allGoalsObjects(achieved: Bool) -> [ToDo] {
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    let context  = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var fetchedRC: NSFetchedResultsController<ToDo>!
+    let formatter = DateFormatter()
+    
+    func allGoalsObjects(achieved: Bool) -> [ToDo]? {
         refresh()
-        let allGoals = fetchedRC.sections?[0].objects as? [ToDo]
-        let allAchievedGoals = allGoals?.filter({ (goal) -> Bool in
-            goal.completed == true
-        })
-        return achieved ? allAchievedGoals! : allGoals!
+        if isThereDataToFetch(fetchedRC: fetchedRC as! NSFetchedResultsController<NSFetchRequestResult>) {
+            let allGoals = fetchedRC.sections?[0].objects as? [ToDo]
+            let allAchievedGoals = allGoals!.filter({ (goal) -> Bool in
+                goal.completed == true
+            })
+            return achieved ? allAchievedGoals : allGoals!
+        }
+        return nil
+    }
+    
+    func isThereDataToFetch(fetchedRC: NSFetchedResultsController<NSFetchRequestResult>) -> Bool {
+        if fetchedRC.sections?.count != 0 {
+            return true
+        }
+        return false
     }
     
     func monthly(goals: [ToDo]) -> [Double] {
@@ -77,7 +87,7 @@ class DataController: NSManagedObject {
         return date
     }
     
-    private func refresh() {
+    func refresh() {
         let request = ToDo.fetchRequest() as NSFetchRequest<ToDo>
         let sort    = NSSortDescriptor(key: #keyPath(ToDo.kind), ascending: true)
         request.sortDescriptors = [sort]

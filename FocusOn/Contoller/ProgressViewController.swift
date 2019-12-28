@@ -11,6 +11,7 @@ import Charts
 import CoreData
 
 class ProgressViewController: UIViewController {
+
     let data = DataController()
     private let formatter = DateFormatter()
 
@@ -80,12 +81,13 @@ class ProgressViewController: UIViewController {
         var dataEntries1 = [BarChartDataEntry]()
         var dataEntries2 = [BarChartDataEntry]()
         let xValuesForTotalGoals = [0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5]
-
-        totalGoals = data.monthly(goals: data.allGoalsObjects(achieved: false))
-        completedGoals = data.monthly(goals: data.allGoalsObjects(achieved: true))
-        for i in 0..<months.count {
-            dataEntries1.append(BarChartDataEntry(x: xValuesForTotalGoals[i], y: totalGoals[i]))
-            dataEntries2.append(BarChartDataEntry(x: Double(i), y: completedGoals[i]))
+        if data.allGoalsObjects(achieved: true) != nil || data.allGoalsObjects(achieved: false) != nil {
+            totalGoals = data.monthly(goals: data.allGoalsObjects(achieved: false)!)
+            completedGoals = data.monthly(goals: data.allGoalsObjects(achieved: true)!)
+            for i in 0..<months.count {
+                dataEntries1.append(BarChartDataEntry(x: xValuesForTotalGoals[i], y: totalGoals[i]))
+                dataEntries2.append(BarChartDataEntry(x: Double(i), y: completedGoals[i]))
+            }
         }
         let chartDataSet1 = BarChartDataSet(entries: dataEntries1, label: "Total Number Of Goals")
         let chartDataSet2 = BarChartDataSet(entries: dataEntries2, label: "Completed Goals")
@@ -105,12 +107,13 @@ class ProgressViewController: UIViewController {
         var dataEntries1 = [BarChartDataEntry]()
         var dataEntries2 = [BarChartDataEntry]()
         let xValuesForTotalGoals = [0.5,1.5,2.5,3.5,4.5]
-
-        totalGoals = data.weekly(goals: data.allGoalsObjects(achieved: false))
-        completedGoals = data.weekly(goals: data.allGoalsObjects(achieved: true))
-        for i in 0..<weeks.count {
-            dataEntries1.append(BarChartDataEntry(x: xValuesForTotalGoals[i], y: totalGoals[i]))
-            dataEntries2.append(BarChartDataEntry(x: Double(i), y: completedGoals[i]))
+        if data.allGoalsObjects(achieved: true) != nil || data.allGoalsObjects(achieved: false) != nil {
+            totalGoals = data.weekly(goals: data.allGoalsObjects(achieved: false)!)
+            completedGoals = data.weekly(goals: data.allGoalsObjects(achieved: true)!)
+            for i in 0..<weeks.count {
+                dataEntries1.append(BarChartDataEntry(x: xValuesForTotalGoals[i], y: totalGoals[i]))
+                dataEntries2.append(BarChartDataEntry(x: Double(i), y: completedGoals[i]))
+            }
         }
         let chartDataSet1 = BarChartDataSet(entries: dataEntries1, label: "Total Number Of Goals")
         let chartDataSet2 = BarChartDataSet(entries: dataEntries2, label: "Completed Goals")

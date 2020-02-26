@@ -64,7 +64,7 @@ class DataController {
                         numberOfgoalsInOneWeek = 0.0
                         for goal in 0..<goals.count {
                         if removeDayStamp(fromDate: goals[goal].cd!) == removeDayStamp(fromDate: Date()) {
-                        let isoDate = "2020-\(currentMonth())-\(weeks[week])T00:00:00+0000"
+                        let isoDate = "\(currentYear())-\(currentMonth())-\(weeks[week])T00:00:00+0000"
                             if theWeekNumberOfMonth(fromDate: goals[goal].cd!) == theWeekNumberOfMonth(fromDate: formatter.date(from: isoDate)!) {
                             numberOfgoalsInOneWeek += 1
                         }

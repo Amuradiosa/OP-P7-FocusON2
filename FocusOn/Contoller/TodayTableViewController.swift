@@ -20,7 +20,6 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
     private let formatter = DateFormatter()
     // Global goal variable to hold the latest goal entered
     private var goal: ToDo!
-    private let taskCell = TaskCustomStaticTableViewCell()
         
     // MARK: - Goal Cell outlets
     
@@ -216,6 +215,7 @@ class TodayTableViewController: UITableViewController, UITextViewDelegate {
         let cell = UINib(nibName: "TaskCustomStaticTableViewCell", bundle: nil)
         tableView.register(cell, forCellReuseIdentifier: "customCell")
     }
+    
     
     // MARK: - Table view data source
     

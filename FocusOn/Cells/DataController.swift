@@ -43,7 +43,7 @@ class DataController {
         let months = [01,02,03,04,05,06,07,08,09,10,11,12]
         for month in 0...11 {
             numberOfgoalsInOneMonth = 0.0
-            let isoDate = "2019-\(months[month])-01T00:00:00+0000"
+            let isoDate = "\(currentYear())-\(months[month])-01T00:00:00+0000"
             let currentMonth = removeDayStamp(fromDate: formatter.date(from: isoDate)!)
             for goal in 0..<goals.count {
                 if removeDayStamp(fromDate: goals[goal].cd!) == currentMonth {
@@ -64,7 +64,7 @@ class DataController {
                         numberOfgoalsInOneWeek = 0.0
                         for goal in 0..<goals.count {
                         if removeDayStamp(fromDate: goals[goal].cd!) == removeDayStamp(fromDate: Date()) {
-                        let isoDate = "2019-11-\(weeks[week])T00:00:00+0000"
+                        let isoDate = "2020-\(currentMonth())-\(weeks[week])T00:00:00+0000"
                             if theWeekNumberOfMonth(fromDate: goals[goal].cd!) == theWeekNumberOfMonth(fromDate: formatter.date(from: isoDate)!) {
                             numberOfgoalsInOneWeek += 1
                         }
@@ -73,6 +73,20 @@ class DataController {
                     weeklyGoals.append(numberOfgoalsInOneWeek)
             }
         return weeklyGoals
+    }
+    
+    private func currentYear() -> String {
+        guard let date = Calendar.current.dateComponents([.year], from: Date()).year else {
+            fatalError("Failed to strip day from Date object")
+        }
+        return "\(date)"
+    }
+    
+    private func currentMonth() -> String {
+        guard let date = Calendar.current.dateComponents([.month], from: Date()).month else {
+            fatalError("Failed to strip day from Date object")
+        }
+        return "\(date)"
     }
     
     private func removeDayStamp(fromDate: Date) -> Date {

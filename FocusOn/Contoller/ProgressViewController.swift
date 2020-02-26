@@ -85,8 +85,8 @@ class ProgressViewController: UIViewController {
             totalGoals = data.monthly(goals: data.allGoalsObjects(achieved: false)!)
             completedGoals = data.monthly(goals: data.allGoalsObjects(achieved: true)!)
             for i in 0..<months.count {
-                dataEntries1.append(BarChartDataEntry(x: xValuesForTotalGoals[i], y: totalGoals[i]))
-                dataEntries2.append(BarChartDataEntry(x: Double(i), y: completedGoals[i]))
+                dataEntries1.append(BarChartDataEntry(x: xValuesForTotalGoals[i] - 0.3, y: totalGoals[i]))
+                dataEntries2.append(BarChartDataEntry(x: Double(i) - 0.3, y: completedGoals[i]))
             }
         }
         let chartDataSet1 = BarChartDataSet(entries: dataEntries1, label: "Total Number Of Goals")
@@ -111,8 +111,8 @@ class ProgressViewController: UIViewController {
             totalGoals = data.weekly(goals: data.allGoalsObjects(achieved: false)!)
             completedGoals = data.weekly(goals: data.allGoalsObjects(achieved: true)!)
             for i in 0..<weeks.count {
-                dataEntries1.append(BarChartDataEntry(x: xValuesForTotalGoals[i], y: totalGoals[i]))
-                dataEntries2.append(BarChartDataEntry(x: Double(i), y: completedGoals[i]))
+                dataEntries1.append(BarChartDataEntry(x: xValuesForTotalGoals[i] + 0.3, y: totalGoals[i]))
+                dataEntries2.append(BarChartDataEntry(x: Double(i) + 0.3, y: completedGoals[i]))
             }
         }
         let chartDataSet1 = BarChartDataSet(entries: dataEntries1, label: "Total Number Of Goals")
@@ -139,9 +139,9 @@ class ProgressViewController: UIViewController {
         super.viewDidLoad()
         configure()
         configureDate()
-//        print(data.monthly(goals: data.allGoalsObjects(achieved: true)))
-//        print(data.monthly(goals: data.allGoalsObjects(achieved: false)))
-//        print(data.weekly(goals: data.allGoalsObjects(achieved: true)))
-//        print(data.weekly(goals: data.allGoalsObjects(achieved: false)))
+        print(data.monthly(goals: data.allGoalsObjects(achieved: true)!))
+        print(data.monthly(goals: data.allGoalsObjects(achieved: false)!))
+        print(data.weekly(goals: data.allGoalsObjects(achieved: true)!))
+        print(data.weekly(goals: data.allGoalsObjects(achieved: false)!))
     }
 }

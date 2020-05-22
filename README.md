@@ -15,7 +15,7 @@ It consists of three screen tabs:
 </p><br/>
 
 ## Today
-This screen is the initial one the user will first see. App asks for the user's permission to send notifications. The app sends a notification 3 hours after setting up the goal to remind him/her to complete the tasks and the goal.<br/>
+This screen is the initial one the user will first see. App asks for the user's permission to send notifications. The app sends a notification 3 hours after setting up the goal to remind the user to complete the tasks and the goal.<br/>
 The user can add/remove/update one goal and its associated three tasks for the day.<br/>
 The user needs to have a goal for the day before adding any helping tasks.
 
@@ -45,14 +45,14 @@ The user can see whether the goals/tasks were completed or not.
 </p>
 
 ## Progress
-This screen shows a chart indicating the total number of goals  and the number completed ones too for each month of the current year. And it also shows a chart indicating the total number of goals and the number completed ones for each week of the current month.
+This screen shows a chart indicating the total number of goals  and the number of completed goals too for each month of the current year. And it also shows a chart indicating the total number of goals and the number of completed goals for each week of the current month.
 
 <p align="center">
 <img src="Images/10.png" width="300">
 <img src="Images/11.png" width="300">
 </p><br/>
 
-Every new day, if the previous goal has not been completed, the app will give the user an option to make the uncompleted goal as today's new goal instead of creating a new one.
+Every new day, if the previous goal has not been achieved, the app will give the user an option to make the uncompleted goal as today's new goal instead of creating a new one.
 
 <p align="center">
 <img src="Images/12.png" width="300">

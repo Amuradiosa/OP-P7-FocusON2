@@ -12,6 +12,7 @@
 		15521CD4237C4F740031EA20 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 15521CCC237C4E940031EA20 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		15521CE0237E97710031EA20 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15521CDF237E97710031EA20 /* DataController.swift */; };
 		15521D112393E95F0031EA20 /* DataControllerTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15521D102393E95F0031EA20 /* DataControllerTestCase.swift */; };
+		155907DD24774C6900B18440 /* BaseTabBarControllerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155907DC24774C6900B18440 /* BaseTabBarControllerViewController.swift */; };
 		15706676235231D000DF3D02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15706675235231D000DF3D02 /* AppDelegate.swift */; };
 		15706678235231D000DF3D02 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15706677235231D000DF3D02 /* SceneDelegate.swift */; };
 		1570667D235231D000DF3D02 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1570667B235231D000DF3D02 /* Main.storyboard */; };
@@ -72,6 +73,8 @@
 		15521D042393E88E0031EA20 /* FocusOnTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FocusOnTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		15521D082393E88E0031EA20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		15521D102393E95F0031EA20 /* DataControllerTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataControllerTestCase.swift; sourceTree = "<group>"; };
+		155907DC24774C6900B18440 /* BaseTabBarControllerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarControllerViewController.swift; sourceTree = "<group>"; };
+		155907DE247815AE00B18440 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		15706672235231D000DF3D02 /* FocusOn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FocusOn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		15706675235231D000DF3D02 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		15706677235231D000DF3D02 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -133,9 +136,18 @@
 			path = FocusOnTests;
 			sourceTree = "<group>";
 		};
+		155907D92477490300B18440 /* Helper Controller */ = {
+			isa = PBXGroup;
+			children = (
+				155907DC24774C6900B18440 /* BaseTabBarControllerViewController.swift */,
+			);
+			path = "Helper Controller";
+			sourceTree = "<group>";
+		};
 		15706669235231CF00DF3D02 = {
 			isa = PBXGroup;
 			children = (
+				155907DE247815AE00B18440 /* README.md */,
 				15521CC6237C4E930031EA20 /* Charts.xcodeproj */,
 				15706674235231D000DF3D02 /* FocusOn */,
 				15521D052393E88E0031EA20 /* FocusOnTests */,
@@ -173,6 +185,7 @@
 				157066902353345D00DF3D02 /* HistoryViewController.swift */,
 				15706692235334D900DF3D02 /* ProgressViewController.swift */,
 				157066B0235C94A100DF3D02 /* TodayTableViewController.swift */,
+				155907D92477490300B18440 /* Helper Controller */,
 			);
 			path = Contoller;
 			sourceTree = "<group>";
@@ -360,6 +373,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				157066B1235C94A100DF3D02 /* TodayTableViewController.swift in Sources */,
+				155907DD24774C6900B18440 /* BaseTabBarControllerViewController.swift in Sources */,
 				157066B42365AAD600DF3D02 /* TaskCustomStaticTableViewCell.swift in Sources */,
 				15706680235231D000DF3D02 /* FocusOn.xcdatamodeld in Sources */,
 				15706676235231D000DF3D02 /* AppDelegate.swift in Sources */,

@@ -10,5 +10,5 @@ import Foundation
 import UIKit
 
 class HistoryTableViewCell: UITableViewCell {
-    @IBOutlet weak var toDoCellLabel: UILabel!
+  @IBOutlet weak var toDoCellLabel: UILabel!
 }

@@ -12,14 +12,14 @@ import CoreData
 
 
 extension ToDo {
-
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<ToDo> {
-        return NSFetchRequest<ToDo>(entityName: "ToDo")
-    }
-
-    @NSManaged public var caption: String?
-    @NSManaged public var cd: Date?
-    @NSManaged public var completed: Bool
-    @NSManaged public var kind: Bool
-
+  
+  @nonobjc public class func fetchRequest() -> NSFetchRequest<ToDo> {
+    return NSFetchRequest<ToDo>(entityName: "ToDo")
+  }
+  
+  @NSManaged public var caption: String?
+  @NSManaged public var cd: Date?
+  @NSManaged public var completed: Bool
+  @NSManaged public var kind: Bool
+  
 }
